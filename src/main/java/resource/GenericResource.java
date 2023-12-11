@@ -13,12 +13,18 @@ public abstract class GenericResource<T> {
 
     protected List<DataListener<T>> dataListeners;
 
+    private String id;
+
     private String type;
 
     public GenericResource() {
         this.dataListeners = new ArrayList<>();
     }
 
+    public GenericResource(String id, String type){
+        this.id = id;
+        this.type = type;
+    }
     public void addDataListener(DataListener<T> resourceDataListener){
         if(this.dataListeners != null)
             this.dataListeners.add(resourceDataListener);
@@ -37,6 +43,14 @@ public abstract class GenericResource<T> {
             });
         else
             logger.info("Nothing to notify. The list of listeners is null or empty!");
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getType() {
