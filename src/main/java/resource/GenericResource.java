@@ -19,8 +19,6 @@ public abstract class GenericResource<T> {
         this.dataListeners = new ArrayList<>();
     }
 
-    public abstract T loadUpdatedValue();
-
     public void addDataListener(DataListener<T> resourceDataListener){
         if(this.dataListeners != null)
             this.dataListeners.add(resourceDataListener);
