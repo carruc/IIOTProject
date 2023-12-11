@@ -1,4 +1,4 @@
 package model;
 
-public class GPSSensorDescriptor extends DeviceDescriptor{
+public class GPSSensorDescriptor{
 }

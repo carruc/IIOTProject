@@ -1,4 +1,5 @@
 package model;
 
-public class HealthcareSensorDescriptor extends DeviceDescriptor{
+public class HealthcareSensorDescriptor{
+
 }
