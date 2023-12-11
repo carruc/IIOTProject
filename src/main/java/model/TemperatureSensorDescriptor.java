@@ -13,15 +13,15 @@ public class TemperatureSensorDescriptor extends GenericDescriptor<Double>{
 
     private final double MIN_OFFSET = -3.0;
 
-    public static final String RESOURCE_UNIT = "C";
+    public static final String UNIT = "C";
 
-    public static final String RESOURCE_TYPE = "iot:sensor:temperature";
+    public static final String TYPE = "iot:sensor:temperature";
 
     public TemperatureSensorDescriptor(){
         super();
     }
 
     public TemperatureSensorDescriptor(String type, String unit, Double value){
-
+        super(type, unit, value);
     }
 }

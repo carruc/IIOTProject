@@ -1,34 +1,14 @@
 package model;
 
 abstract public class GenericDescriptor<T> {
-    private String type;
-    private String unit;
     private T value;
 
     public GenericDescriptor(){
 
     }
 
-    public GenericDescriptor(String type, String unit, T value) {
-        this.type = type;
-        this.unit = unit;
+    public GenericDescriptor(T value) {
         this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
     }
 
     public T getValue() {
@@ -43,6 +23,6 @@ abstract public class GenericDescriptor<T> {
 
     @Override
     public String toString() {
-        return "GenericDescriptor{" + "type='" + type + '\'' + ", unit='" + unit + '\'' + ", value=" + value + '}';
+        return "GenericDescriptor{" + "value= " + value + '}';
     }
 }
