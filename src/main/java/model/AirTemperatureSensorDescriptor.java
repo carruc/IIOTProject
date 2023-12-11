@@ -2,7 +2,7 @@ package model;
 
 import java.util.Random;
 
-public class TemperatureSensorDescriptor extends GenericDescriptor<Double>{
+public class AirTemperatureSensorDescriptor extends GenericDescriptor<Double> {
 
     private final double MAX_TEMPERATURE_VALUE = 30.0;
 
@@ -16,14 +16,14 @@ public class TemperatureSensorDescriptor extends GenericDescriptor<Double>{
 
     public static final String TEMPERATURE_SENSOR_TYPE = "iot:sensor:temperature";
 
-    private Random random = new Random(System.currentTimeMillis());
+    private final Random random = new Random(System.currentTimeMillis());
 
-    public TemperatureSensorDescriptor(){
-        super();
+    public AirTemperatureSensorDescriptor() {
+        super(0.0);
         setValue(MIN_TEMPERATURE_VALUE + this.random.nextDouble() * (MAX_TEMPERATURE_VALUE - MIN_TEMPERATURE_VALUE));
     }
 
-    public TemperatureSensorDescriptor(Double value){
+    public AirTemperatureSensorDescriptor(Double value) {
         super(value);
         setValue(MIN_TEMPERATURE_VALUE + this.random.nextDouble() * (MAX_TEMPERATURE_VALUE - MIN_TEMPERATURE_VALUE));
     }

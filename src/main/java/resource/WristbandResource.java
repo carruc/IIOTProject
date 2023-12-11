@@ -1,6 +1,6 @@
 package resource;
 
-import model.HealthcareSensorDescriptor;
+import model.BPMSensorDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,13 +8,13 @@ import java.util.Timer;
 import java.util.UUID;
 
 //PER ORA il braccialetto contiene solo un sensore di salute
-public class WristbandResource extends GenericResource<HealthcareSensorDescriptor> {
+public class WristbandResource extends GenericResource<BPMSensorDescriptor> {
 
     private static final Logger logger = LoggerFactory.getLogger(WristbandResource.class);
 
     private static final String RESOURCE_TYPE = "iot:object:wristband";
 
-    private HealthcareSensorDescriptor healthcareSensor;
+    private BPMSensorDescriptor healthcareSensor;
 
     private Timer timer = null;
 

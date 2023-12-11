@@ -35,5 +35,4 @@ public class PointXYZ {
     public void setElevation(double elevation) {
         this.elevation = elevation;
     }
-
 }
