@@ -1,8 +1,8 @@
 package model.sensor_actuator_descriptors;
 
-public class VideocameraDescriptor extends GenericDescriptor<Integer>{
+public class HVACActuatorDescriptor extends GenericDescriptor<Double>{
 
-    public VideocameraDescriptor(Integer value) {
+    public HVACActuatorDescriptor(Double value) {
         super(value);
     }
 
