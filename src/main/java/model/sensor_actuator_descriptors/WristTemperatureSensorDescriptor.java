@@ -1,8 +1,10 @@
 package model.sensor_actuator_descriptors;
 
-import model.sensor_actuator_descriptors.GenericDescriptor;
-
 import java.util.Random;
+
+/** Class that models wrist temperature sensors.
+ *  Value represents degrees-Celsius.
+ */
 
 public class WristTemperatureSensorDescriptor extends GenericDescriptor<Double> {
 

@@ -1,5 +1,8 @@
 package model.sensor_actuator_descriptors;
 
+/** Generic descriptor class for actuator/sensor modeling,
+ * wrapping it as a Generic value.
+ */
 abstract public class GenericDescriptor<T> {
     private T value;
 

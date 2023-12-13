@@ -4,6 +4,9 @@ import model.sensor_actuator_descriptors.BPMSensorDescriptor;
 import model.sensor_actuator_descriptors.OxygenSensorDescriptor;
 import model.sensor_actuator_descriptors.WristTemperatureSensorDescriptor;
 
+/** Wrapper class for Healthcare related descriptors.
+ */
+
 public class HealthcareSensorDescriptor {
     BPMSensorDescriptor bpmSensor;
     OxygenSensorDescriptor oxygenSensor;

@@ -1,5 +1,9 @@
 package model.sensor_actuator_descriptors;
 
+/** Model for HVAC piloting. Value represents the delivered temperature.
+ * Does not take into account hysteresis logic.
+ */
+
 public class HVACActuatorDescriptor extends GenericDescriptor<Double>{
 
     public HVACActuatorDescriptor(Double value) {

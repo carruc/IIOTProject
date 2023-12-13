@@ -2,7 +2,8 @@ package model.sensor_actuator_descriptors;
 
 import java.util.Random;
 
-/** Modeling class for
+/** Model for thermostat-related temperature sensors.
+ * Value represents the temperature in degrees-Celsius.
  */
 public class AirTemperatureSensorDescriptor extends GenericDescriptor<Double> {
 

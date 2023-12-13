@@ -2,6 +2,8 @@ package model.sensor_actuator_descriptors;
 
 import java.util.Random;
 
+/** ECG sensor model for BPM monitoring.
+ */
 public class BPMSensorDescriptor extends GenericDescriptor<Double>{
 
     public BPMSensorDescriptor(){
