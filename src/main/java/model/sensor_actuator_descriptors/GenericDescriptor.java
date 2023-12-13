@@ -1,4 +1,4 @@
-package model;
+package model.sensor_actuator_descriptors;
 
 abstract public class GenericDescriptor<T> {
     private T value;
