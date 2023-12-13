@@ -2,6 +2,8 @@ package model.sensor_actuator_descriptors;
 
 import java.util.Random;
 
+/** Modeling class for
+ */
 public class AirTemperatureSensorDescriptor extends GenericDescriptor<Double> {
 
     private final double MAX_TEMPERATURE_VALUE = 30.0;
