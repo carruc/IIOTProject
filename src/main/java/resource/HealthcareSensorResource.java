@@ -34,6 +34,7 @@ public class HealthcareSensorResource extends GenericResource<HealthcareSensorDe
     private void init() {
         healthcareSensor = new HealthcareSensorDescriptor(new BPMSensorDescriptor(), new OxygenSensorDescriptor(), new WristTemperatureSensorDescriptor());
         timer = new Timer();
+        startPeriodicTask();
     }
 
     private void startPeriodicTask(){
