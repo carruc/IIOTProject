@@ -3,15 +3,15 @@ package resource;
 import model.sensor_actuator_descriptors.AlarmActuatorDescriptor;
 import model.sensor_actuator_descriptors.GPSSensorDescriptor;
 import model.sensor_actuator_descriptors.HealthcareSensorDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 import java.util.Timer;
 import java.util.UUID;
 
 public class GPSSensorResource extends GenericResource<GPSSensorDescriptor> {
-    private static final Logger logger = LoggerFactory.getLogger(GPSSensorResource.class);
+    //private static final Logger logger = LoggerFactory.getLogger(GPSSensorResource.class);
 
     private static final String RESOURCE_TYPE = "iot:object:wristband";
 
