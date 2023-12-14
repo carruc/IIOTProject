@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Inventario {
+
+    /**Classe usata per gestire l'inventario dei medicinali**/
     private Map<String, Medicinale> inventario;
 
     public Inventario() {
