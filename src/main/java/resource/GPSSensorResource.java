@@ -1,8 +1,8 @@
 package resource;
 
-import model.sensor_actuator_descriptors.AlarmActuatorDescriptor;
-import model.sensor_actuator_descriptors.GPSSensorDescriptor;
-import model.sensor_actuator_descriptors.HealthcareSensorDescriptor;
+import model.descriptors.AlarmActuatorDescriptor;
+import model.descriptors.GPSSensorDescriptor;
+import model.descriptors.HealthcareSensorDescriptor;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 

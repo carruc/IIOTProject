@@ -1,4 +1,4 @@
-package model.sensor_actuator_descriptors;
+package model.descriptors;
 
 import java.awt.geom.Point2D;
 

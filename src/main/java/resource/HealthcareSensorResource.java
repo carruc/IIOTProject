@@ -1,8 +1,7 @@
 package resource;
 
-import model.sensor_actuator_descriptors.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import model.descriptors.*;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;

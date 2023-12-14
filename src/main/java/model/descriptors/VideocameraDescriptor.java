@@ -1,4 +1,4 @@
-package model.sensor_actuator_descriptors;
+package model.descriptors;
 
 /** Model for a video recognition system monitoring
  * the number of people in a room.
