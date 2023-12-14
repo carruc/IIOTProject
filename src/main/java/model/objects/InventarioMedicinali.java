@@ -3,12 +3,11 @@ package model.objects;
 import java.util.HashMap;
 import java.util.Map;
 
-class Inventario {
+class InventarioMedicinali {
 
-    /**Classe usata per gestire l'inventario dei medicinali**/
     private Map<String, Medicinale> inventario;
 
-    public Inventario() {
+    public InventarioMedicinali() {
         this.inventario = new HashMap<>();
     }
 
