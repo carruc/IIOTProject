@@ -33,6 +33,6 @@ public class AirTemperatureSensorDescriptor extends GenericDescriptor<Double> {
 
     @Override
     public void refreshValue() {
-        setValue(getValue() + (MIN_OFFSET + random.nextDouble() * (MAX_OFFSET - MIN_OFFSET)));
+        setValue(getValue() + (MIN_OFFSET * random.nextDouble() + MAX_OFFSET * random.nextDouble()));
     }
 }
