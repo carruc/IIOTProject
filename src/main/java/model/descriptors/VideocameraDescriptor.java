@@ -1,4 +1,4 @@
-package model.sensor_actuator_descriptors;
+package model.descriptors;
 
 
 public class VideocameraDescriptor extends GenericDescriptor<Integer>{

@@ -1,7 +1,6 @@
-package model.sensor_actuator_descriptors;
+package model.descriptors;
 
 import model.point.PointXYZ;
-import model.sensor_actuator_descriptors.GenericDescriptor;
 
 /** Three-dimensional GPS location model. Uses proprietary class "PointXYZ".
  */

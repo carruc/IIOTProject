@@ -1,8 +1,4 @@
-package model.sensor_actuator_descriptors;
-
-import model.sensor_actuator_descriptors.BPMSensorDescriptor;
-import model.sensor_actuator_descriptors.OxygenSensorDescriptor;
-import model.sensor_actuator_descriptors.WristTemperatureSensorDescriptor;
+package model.descriptors;
 
 /** Wrapper class for Healthcare related descriptors.
  */

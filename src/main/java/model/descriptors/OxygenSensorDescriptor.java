@@ -1,6 +1,4 @@
-package model.sensor_actuator_descriptors;
-
-import model.sensor_actuator_descriptors.GenericDescriptor;
+package model.descriptors;
 
 import java.util.Random;
 

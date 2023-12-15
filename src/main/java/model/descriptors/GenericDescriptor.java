@@ -1,4 +1,4 @@
-package model.sensor_actuator_descriptors;
+package model.descriptors;
 
 /** Generic descriptor class for actuator/sensor modeling,
  * wrapping it as a Generic value.

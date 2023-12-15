@@ -1,4 +1,4 @@
-package model.sensor_actuator_descriptors;
+package model.descriptors;
 
 /** Model for HVAC piloting. Value represents the delivered temperature.
  * Does not take into account hysteresis logic.
