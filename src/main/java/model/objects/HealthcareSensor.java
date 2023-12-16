@@ -15,8 +15,7 @@ public class HealthcareSensor {
         this.BPMValue = BPMValue;
     }
 
-    /**TODO: aggiungere dei valori sensati
-     * **/
+
     private double generateTemperatureValue() {
         // Range tipico per la temperatura corporea umana: 36.0°C - 37.5°C
         return 36.0 + rnd.nextDouble() * (37.5 - 36.0);
@@ -43,7 +42,7 @@ public class HealthcareSensor {
         return temperatureValue;
     }
 
-    public double getOxygenValuealue() {
+    public double getOxygenValue() {
         generateOxygenValue();
         return oxygenValue;
     }
