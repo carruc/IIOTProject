@@ -2,7 +2,7 @@ package device;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.google.gson.Gson;
+
 
 public class VideocameraSmartObject {
 
@@ -20,7 +20,7 @@ public class VideocameraSmartObject {
     private static final String SENSOR_TOPIC = "sensor/videocamera";    //puo essere migliorato
 
 
-    private static Gson gson = new Gson();
+
 
 
 
