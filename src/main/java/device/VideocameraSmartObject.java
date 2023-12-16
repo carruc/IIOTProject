@@ -4,11 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 
-public class VideocameraDevice {
+public class VideocameraSmartObject {
 
     /*TODO: la videocamera è un producer che pubblica i dati*/
 
-    private final static Logger logger = LoggerFactory.getLogger(VideocameraDevice.class);
+    private final static Logger logger = LoggerFactory.getLogger(VideocameraSmartObject.class);
 
     private static String BROKER_URL = "tcp://broker.emqx.io:1883";     //sito del broker: https://www.emqx.com/en/mqtt/public-mqtt5-broker
 
