@@ -28,7 +28,7 @@ public class WristbandSmartObject {
         this.mapper = mapper;
     }
 
-    public void init(String vehicleId,IMqttClient,Map<String,GenericResource<?>> resourceMap){
+    public void init(String vehicleId,IMqttClient mqttClient,Map<String,GenericResource<?>> resourceMap){
         this.wristbandId = wristbandId;
         this.mqttClient = mqttClient;
         this.resourceMap = resourceMap;
