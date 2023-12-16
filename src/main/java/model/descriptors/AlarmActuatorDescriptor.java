@@ -6,9 +6,8 @@ import java.util.Random;
  * Value represents ON/OFF state.
  */
 public class AlarmActuatorDescriptor extends GenericDescriptor<Boolean> {
-
     public AlarmActuatorDescriptor(){
-        super(new Random().nextBoolean());
+        super(false);
     }
     public AlarmActuatorDescriptor(Boolean value) {
         super(value);
@@ -16,6 +15,5 @@ public class AlarmActuatorDescriptor extends GenericDescriptor<Boolean> {
 
     @Override
     public void refreshValue() {
-
     }
 }

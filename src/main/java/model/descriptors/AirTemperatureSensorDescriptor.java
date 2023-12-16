@@ -2,14 +2,15 @@ package model.descriptors;
 
 import java.util.Random;
 
-/** Model for thermostat-related temperature sensors.
+/**
+ * Model for thermostat-related temperature sensors.
  * Value represents the temperature in degrees-Celsius.
  */
 public class AirTemperatureSensorDescriptor extends GenericDescriptor<Double> {
 
-    private final double MAX_TEMPERATURE_VALUE = 30.0;
+    private final double MAX_TEMPERATURE_VALUE = 35.0;
 
-    private final double MIN_TEMPERATURE_VALUE = 20.0;
+    private final double MIN_TEMPERATURE_VALUE = 15.0;
 
     private final double MAX_OFFSET = +3.0;
 
@@ -28,11 +29,10 @@ public class AirTemperatureSensorDescriptor extends GenericDescriptor<Double> {
 
     public AirTemperatureSensorDescriptor(Double value) {
         super(value);
-        setValue(MIN_TEMPERATURE_VALUE + this.random.nextDouble() * (MAX_TEMPERATURE_VALUE - MIN_TEMPERATURE_VALUE));
     }
 
     @Override
     public void refreshValue() {
-        setValue(getValue() + (MIN_OFFSET * random.nextDouble() + MAX_OFFSET * random.nextDouble()));
+        setValue(MIN_TEMPERATURE_VALUE + this.random.nextDouble() * (MAX_TEMPERATURE_VALUE - MIN_TEMPERATURE_VALUE));
     }
 }
