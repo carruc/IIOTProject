@@ -6,6 +6,10 @@ package model.descriptors;
 abstract public class GenericDescriptor<T> {
     private T value;
 
+    public GenericDescriptor() {
+        this.value = null;
+    }
+
     public GenericDescriptor(T value) {
         this.value = value;
     }
@@ -17,8 +21,6 @@ abstract public class GenericDescriptor<T> {
     public void setValue(T value) {
         this.value = value;
     }
-
-    public abstract void refreshValue();
 
     @Override
     public String toString() {
