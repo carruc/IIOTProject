@@ -9,7 +9,7 @@ import java.util.Random;
 public class OxygenSensorDescriptor extends GenericDescriptor<Double> {
 
     public OxygenSensorDescriptor(){
-        super(new Random().nextDouble() * 100);
+        super();
     }
     public OxygenSensorDescriptor(Double value) {
         super(value);
@@ -17,6 +17,6 @@ public class OxygenSensorDescriptor extends GenericDescriptor<Double> {
 
     @Override
     public void refreshValue() {
-
+        this.setValue(this.getRandom().nextDouble(0.700, 0.999));
     }
 }

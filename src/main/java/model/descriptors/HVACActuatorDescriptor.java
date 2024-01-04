@@ -4,9 +4,9 @@ package model.descriptors;
  * Does not take into account hysteresis logic.
  */
 
-public class HVACActuatorDescriptor extends GenericDescriptor<Double>{
+public class HVACActuatorDescriptor extends GenericDescriptor<Boolean>{
 
-    public HVACActuatorDescriptor(Double value) {
+    public HVACActuatorDescriptor(Boolean value) {
         super(value);
     }
 
