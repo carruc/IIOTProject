@@ -14,7 +14,7 @@ class AlarmValueDescriptorTest {
         AlarmValueDescriptor aad = new AlarmValueDescriptor();
         List<Boolean> randomList = new ArrayList<>();
         IntStream.range(0, 10).forEach( i -> {
-            aad.setValue();
+            //aad.setValue(f);
             randomList.add(aad.getValue());
         });
         System.out.println(randomList);
