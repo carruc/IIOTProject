@@ -1,8 +1,8 @@
 package resource;
 
-import model.descriptors.AlarmActuatorDescriptor;
-import model.descriptors.GPSSensorDescriptor;
-import model.descriptors.HealthcareSensorDescriptor;
+import model.descriptors.wristband.GPSLocationDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
@@ -10,14 +10,14 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.UUID;
 
-public class GPSSensorResource extends GenericResource<GPSSensorDescriptor> {
-    //private static final Logger logger = LoggerFactory.getLogger(GPSSensorResource.class);
+public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
+    private static final Logger logger = LoggerFactory.getLogger(GPSSensorResource.class);
 
-    private static final String RESOURCE_TYPE = "iot:object:wristband";
+    private static final String GPX_FILE_NAME = "tracks/demo.gpx";
 
-    private HealthcareSensorDescriptor healthcareSensor;
-    private GPSSensorDescriptor gpsSensor;
-    private AlarmActuatorDescriptor alarmActuator;
+    public static final String RESOURCE_TYPE = "iot:object:wristband";
+
+    private GPSLocationDescriptor gpsSensor;
 
     private Random random = new Random(System.currentTimeMillis());
 
@@ -36,6 +36,6 @@ public class GPSSensorResource extends GenericResource<GPSSensorDescriptor> {
     }
 
     private void init(){
-        gpsSensor = new GPSSensorDescriptor();
+        gpsSensor = new GPSLocationDescriptor();
     }
 }

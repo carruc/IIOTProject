@@ -1,22 +1,30 @@
 package resource;
 
-import model.descriptors.*;
+import model.descriptors.wristband.BPMDescriptor;
+import model.descriptors.wristband.BodyTemperatureDescriptor;
+import model.descriptors.wristband.HealthcareDataDescriptor;
+import model.descriptors.wristband.OxygenDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-public class HealthcareSensorResource extends GenericResource<HealthcareSensorDescriptor> {
-    //private static final Logger logger = LoggerFactory.getLogger(HealthcareSensorResource.class);
+public class HealthcareSensorResource extends GenericResource<HealthcareDataDescriptor> {
+    private static final Logger logger = LoggerFactory.getLogger(HealthcareSensorResource.class);
 
-    private static final String RESOURCE_TYPE = "iot:sensor:healthcare";
+    public static final String RESOURCE_TYPE = "iot:sensor:healthcare";
 
-    private HealthcareSensorDescriptor healthcareSensor;
+    private HealthcareDataDescriptor healthcareData;
 
     private Timer timer;
 
-    private static final long HEALTHCARE_DATA_UPDATE_DELAY = 500;
-    private static final long HEALTHCARE_DATA_UPDATE_PERIOD = 1000;
+    private static final long HEALTHCARE_DATA_UPDATE_STARTING_DELAY = 5000;
+    private static final long HEALTHCARE_DATA_UPDATE_PERIOD = 5000;
+
+    private Random random;
 
     public HealthcareSensorResource() {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
@@ -29,23 +37,23 @@ public class HealthcareSensorResource extends GenericResource<HealthcareSensorDe
     }
 
     private void init() {
-        healthcareSensor = new HealthcareSensorDescriptor(new BPMSensorDescriptor(), new OxygenSensorDescriptor(), new WristTemperatureSensorDescriptor());
-        timer = new Timer();
+        healthcareData = new HealthcareDataDescriptor(new BPMDescriptor(), new OxygenDescriptor(), new BodyTemperatureDescriptor());
+        random = new Random();
         startPeriodicTask();
     }
 
     private void startPeriodicTask(){
         try{
+            timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    System.out.println();
-                    healthcareSensor.getBpmSensor().refreshValue();
-                    healthcareSensor.getOxygenSensor().refreshValue();
-                    healthcareSensor.getWristTemperatureSensor().refreshValue();
-                    notifyUpdate(healthcareSensor);
+                    healthcareData.setBPM(healthcareData.getBPM() + (((random.nextDouble() * 2) - 1) * BPMDescriptor.MAX_BPM_VARIATION));
+                    healthcareData.setOxygen(healthcareData.getOxygen() + (((random.nextDouble() * 2) - 1) * OxygenDescriptor.MAX_OXYGEN_VARIATION));
+                    healthcareData.setBodyTemperature(healthcareData.getBodyTemperature() + (((random.nextDouble() * 2) - 1) * BodyTemperatureDescriptor.MAX_BODY_TEMPERATURE_VARIATION));
+                    notifyUpdate(healthcareData);
                 }
-            }, HEALTHCARE_DATA_UPDATE_DELAY, HEALTHCARE_DATA_UPDATE_PERIOD);
+            }, HEALTHCARE_DATA_UPDATE_STARTING_DELAY, HEALTHCARE_DATA_UPDATE_PERIOD);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -54,16 +62,16 @@ public class HealthcareSensorResource extends GenericResource<HealthcareSensorDe
     public static void main(String[] args) {
         HealthcareSensorResource healthcareSensorResource = new HealthcareSensorResource();
 
-        healthcareSensorResource.addDataListener(new ResourceDataListener<HealthcareSensorDescriptor>() {
+        healthcareSensorResource.addDataListener(new ResourceDataListener<HealthcareDataDescriptor>() {
             @Override
-            public void onDataChanged(GenericResource<HealthcareSensorDescriptor> resource,
-                                      HealthcareSensorDescriptor updatedValue) {
+            public void onDataChanged(GenericResource<HealthcareDataDescriptor> resource,
+                                      HealthcareDataDescriptor updatedValue) {
                 if(resource != null && updatedValue != null){
-                    //logger.info("Device: {} -> New healthcare sensor value: {}", resource.getId(), updatedValue);
-                    System.out.println("Device" + resource.getId() + "Value: " + updatedValue);
+                    logger.info("Device: {} -> New healthcare sensor value: {}", resource.getId(), updatedValue);
+                    System.out.println("Device " + resource.getId() + "Value: " + updatedValue);
                 } else{
-                    //logger.error("Error");
-                    System.out.println("Error");
+                    logger.error("Error");
+                    //System.out.println("Error");
                 }
             }
         });

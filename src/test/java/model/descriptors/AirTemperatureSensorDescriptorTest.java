@@ -1,5 +1,6 @@
 package model.descriptors;
 
+import model.descriptors.wristband.BodyTemperatureDescriptor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ class AirTemperatureSensorDescriptorTest {
 
     @Test
     void refreshValue() {
-        GenericTemperatureSensorDescriptor ats = new WristTemperatureSensorDescriptor();
+        GenericTemperatureSensorDescriptor ats = new BodyTemperatureDescriptor();
         List<Double> randomList = new ArrayList<Double>();
         IntStream.range(0, 100).forEach(i -> {
             ats.refreshValue();

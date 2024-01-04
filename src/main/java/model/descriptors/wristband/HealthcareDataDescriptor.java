@@ -1,0 +1,53 @@
+package model.descriptors.wristband;
+
+/** Wrapper class for Healthcare data.
+ */
+
+public class HealthcareDataDescriptor {
+
+    private BPMDescriptor BPMDescriptor;
+    private OxygenDescriptor oxygenDescriptor;
+    private BodyTemperatureDescriptor bodyTemperatureDescriptor;
+
+    public HealthcareDataDescriptor(){
+        this.BPMDescriptor = new BPMDescriptor();
+        this.oxygenDescriptor = new OxygenDescriptor();
+        this.bodyTemperatureDescriptor = new BodyTemperatureDescriptor();
+    }
+
+    public HealthcareDataDescriptor(BPMDescriptor BPMDescriptor, OxygenDescriptor oxygenDescriptor, BodyTemperatureDescriptor bodyTemperatureDescriptor) {
+        this.BPMDescriptor = BPMDescriptor;
+        this.oxygenDescriptor = oxygenDescriptor;
+        this.bodyTemperatureDescriptor = bodyTemperatureDescriptor;
+    }
+
+    public Double getBPM() {
+        return BPMDescriptor.getBPM();
+    }
+
+    public void setBPM(Double BPM) {
+        BPMDescriptor.setBPM(BPM);
+    }
+
+    public Double getOxygen() {
+        return oxygenDescriptor.getOxygen();
+    }
+
+    public void setOxygen(Double oxygen) {
+        oxygenDescriptor.setOxygen(oxygen);
+    }
+
+    public Double getBodyTemperature() {
+        return bodyTemperatureDescriptor.getBodyTemperature();
+    }
+
+    public void setBodyTemperature(Double bodyTemperature) {
+        bodyTemperatureDescriptor.setBodyTemperature(bodyTemperature);
+    }
+
+    @Override
+    public String toString() {
+        return "HealthcareDataDescriptor{" + "BPM=" + BPMDescriptor.getBPM() + ", oxygen=" + oxygenDescriptor.getOxygen() + ", " +
+               "bodyTemperature=" + bodyTemperatureDescriptor.getBodyTemperature() + '}';
+    }
+}

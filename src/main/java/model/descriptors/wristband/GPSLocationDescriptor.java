@@ -1,23 +1,21 @@
-package model.descriptors;
+package model.descriptors.wristband;
 
+import model.descriptors.GenericDescriptor;
 import model.point.PointXYZ;
-import model.point.PointXYZUtils;
-
-import java.util.Random;
 
 /** Three-dimensional GPS location model. Uses proprietary class "PointXYZ".
  */
-public class GPSSensorDescriptor extends GenericDescriptor<PointXYZ> {
+public class GPSLocationDescriptor extends GenericDescriptor<PointXYZ> {
 
     public static final double BOUND = 0.5;
     public static final double LAT_GAIN = 0.1;
     public static final double LONG_GAIN = 0.1;
     public static final double HEIGHT_GAIN = 1;
 
-    public GPSSensorDescriptor(){
+    public GPSLocationDescriptor(){
         super(new PointXYZ(0, 0, 0));
     }
-    public GPSSensorDescriptor(PointXYZ value) {
+    public GPSLocationDescriptor(PointXYZ value) {
         super(value);
     }
 

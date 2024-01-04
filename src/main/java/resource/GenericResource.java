@@ -1,13 +1,13 @@
 package resource;
 
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//SPOSTA IN RESOURCE
 public abstract class GenericResource<T> {
+    private static final Logger logger = LoggerFactory.getLogger(GenericResource.class);
 
     protected List<ResourceDataListener<T>> resourceDataListeners;
 
@@ -22,6 +22,7 @@ public abstract class GenericResource<T> {
     public GenericResource(String id, String type) {
         this.id = id;
         this.type = type;
+        this.resourceDataListeners = new ArrayList<>();
     }
 
     public void addDataListener(ResourceDataListener<T> resourceDataListener) {
@@ -41,7 +42,7 @@ public abstract class GenericResource<T> {
                     resourceResourceDataListener.onDataChanged(this, updatedValue);
             });
         } else {
-            //logger.info("Nothing to notify. The list of listeners is null or empty!");
+            logger.info("Nothing to notify. The list of listeners is null or empty!");
         }
     }
 
