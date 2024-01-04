@@ -20,20 +20,20 @@ public class CartesianMotorActuatorDescriptor extends GenericDescriptor<Point2D.
     private Point2D.Double increment;
 
     public CartesianMotorActuatorDescriptor() {
-        super(new Point2D.Double());
+        super(new Point2D.Double(), "");
         this.destPoint = new Point2D.Double();
         this.increment = new Point2D.Double();
         this.precision = 0.001;
     }
 
     public CartesianMotorActuatorDescriptor(double precision) {
-        super(new Point2D.Double());
+        super(new Point2D.Double(), "");
         this.destPoint = new Point2D.Double();
         this.increment = new Point2D.Double();
         this.precision = precision;
     }
 
-    @Override
+    /*@Override
     public void refreshValue() {
         if (destPoint.distance(getValue()) > precision) {
             this.move();
@@ -41,7 +41,7 @@ public class CartesianMotorActuatorDescriptor extends GenericDescriptor<Point2D.
             this.setValue(destPoint);
             this.increment = new Point2D.Double();
         }
-    }
+    }*/
 
     public Double getDestPoint() {
         return destPoint;

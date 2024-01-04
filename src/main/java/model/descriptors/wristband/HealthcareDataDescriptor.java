@@ -40,9 +40,20 @@ public class HealthcareDataDescriptor {
     public Double getBodyTemperature() {
         return bodyTemperatureDescriptor.getBodyTemperature();
     }
-
     public void setBodyTemperature(Double bodyTemperature) {
         bodyTemperatureDescriptor.setBodyTemperature(bodyTemperature);
+    }
+
+    public String getBPMUnit() {
+        return BPMDescriptor.getUnit();
+    }
+
+    public String getOxygenUnit() {
+        return oxygenDescriptor.getUnit();
+    }
+
+    public String getBodyTemperatureUnit() {
+        return bodyTemperatureDescriptor.getUnit();
     }
 
     @Override

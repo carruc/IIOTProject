@@ -1,36 +1,40 @@
 package model.descriptors.wristband;
 
+import model.descriptors.GenericDescriptor;
+
 /** ECG sensor model for BPM monitoring.
  */
-public class BPMDescriptor{
+public class BPMDescriptor extends GenericDescriptor<Double> {
 
     public static final Double MIN_BPM = 40.0;
     public static final Double MAX_BPM = 180.0;
     public static final Double MAX_BPM_VARIATION = 5.0;
 
-    private Double BPM = 80.0;
-    public BPMDescriptor(){
+    public static final Double DEFAULT_BPM = 80.0;
 
+    public static final String BPM_UNIT = "bpm";
+    public BPMDescriptor(){
+        super(DEFAULT_BPM, BPM_UNIT);
     }
 
     public BPMDescriptor(Double BPM){
-        this.BPM = BPM;
+        super(BPM, BPM_UNIT);
     }
 
     public Double getBPM() {
-        return BPM;
+        return getValue();
     }
 
     public void setBPM(Double BPM) {
         if(BPM < MIN_BPM)
-            this.BPM = MIN_BPM;
+            setValue(MIN_BPM);
         if(BPM > MAX_BPM)
-            this.BPM = MAX_BPM;
-        this.BPM = BPM;
+            setValue(MAX_BPM);
+        setValue(BPM);
     }
 
     @Override
     public String toString() {
-        return "BPMDescriptor{" + "BPM=" + BPM + '}';
+        return "BPMDescriptor{" + "value=" + getBPM() + ", unit='" + getUnit() + '\'' + '}';
     }
 }

@@ -8,20 +8,11 @@ import java.util.Random;
 abstract public class GenericDescriptor<T> {
     private T value;
 
-    private final Random random = new Random(System.currentTimeMillis());
+    private String unit;
 
-    public GenericDescriptor() {
-        this.value = null;
-    }
-
-    public GenericDescriptor(T value) {
+    public GenericDescriptor(T value, String unit) {
         this.value = value;
-    }
-
-    public abstract void refreshValue();
-
-    public Random getRandom() {
-        return random;
+        this.unit = unit;
     }
 
     public T getValue() {
@@ -32,8 +23,16 @@ abstract public class GenericDescriptor<T> {
         this.value = value;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     @Override
     public String toString() {
-        return "GenericDescriptor{" + "value= " + value + '}';
+        return "GenericDescriptor{" + "value=" + value + ", unit='" + unit + '\'' + '}';
     }
 }

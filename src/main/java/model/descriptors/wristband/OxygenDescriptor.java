@@ -1,38 +1,42 @@
 package model.descriptors.wristband;
 
+import model.descriptors.GenericDescriptor;
+
 /** Model for an O2 level sensor.
  * Value represents a percentage (0-100).
  */
 
-public class OxygenDescriptor {
+public class OxygenDescriptor extends GenericDescriptor<Double> {
     public static final Double MIN_OXYGEN = 60.0;
     public static final Double MAX_OXYGEN = 100.0;
     public static final Double MAX_OXYGEN_VARIATION = 1.0;
 
-    private Double oxygen = 95.0;
+    public static final Double DEFAULT_OXYGEN = 95.0;
+
+    public static final String OXYGEN_UNIT = "%";
 
     public OxygenDescriptor(){
-
+        super(DEFAULT_OXYGEN, OXYGEN_UNIT);
     }
 
     public OxygenDescriptor(Double oxygen){
-        this.oxygen = oxygen;
+        super(oxygen, OXYGEN_UNIT);
     }
 
     public Double getOxygen() {
-        return oxygen;
+        return getValue();
     }
 
     public void setOxygen(Double oxygen) {
         if(oxygen < MIN_OXYGEN)
-            this.oxygen = MIN_OXYGEN;
+            setValue(MIN_OXYGEN);
         if(oxygen > MAX_OXYGEN)
-            this.oxygen = MAX_OXYGEN;
-        this.oxygen = oxygen;
+            setValue(MAX_OXYGEN);
+        setValue(oxygen);
     }
 
     @Override
     public String toString() {
-        return "OxygenDescriptor{" + "oxygen=" + oxygen + '}';
+        return "OxygenDescriptor{" + "value=" + getOxygen() + ", unit='" + getUnit() + '\'' + '}';
     }
 }

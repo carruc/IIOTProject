@@ -1,6 +1,6 @@
 package model.descriptors;
 
-public class AirTemperatureSensorDescriptor extends GenericTemperatureSensorDescriptor {
+/*public class AirTemperatureSensorDescriptor extends GenericTemperatureSensorDescriptor {
 
     private final Double MAX_TMP = 25.0;
     private final Double MIN_TMP = 18.0;
@@ -19,4 +19,8 @@ public class AirTemperatureSensorDescriptor extends GenericTemperatureSensorDesc
     public void refreshValue() {
         this.setValue(MIN_TMP + this.getRandom().nextDouble() * (MAX_TMP - MIN_TMP));
     }
+}*/
+
+public class AirTemperatureSensorDescriptor{
+
 }

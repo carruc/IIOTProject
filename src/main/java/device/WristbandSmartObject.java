@@ -68,7 +68,7 @@ public class WristbandSmartObject implements GenericSmartObject{
         }
     }
 
-    //TODO!!!!
+    //TODO !!!!
     public void stop(){
 
     }
@@ -89,7 +89,9 @@ public class WristbandSmartObject implements GenericSmartObject{
                                 try {
 
                                     String healthcareTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, wristbandId, TELEMETRY_TOPIC, resourceEntry.getKey());
-                                    publishTelemetryData(healthcareTopic, new TelemetryMessage<>(healthcareSensorResource.getType(), updatedValue));
+
+                                    publishTelemetryData(healthcareTopic,
+                                            new TelemetryMessage<>(healthcareSensorResource.getType(), updatedValue));
                                 } catch (MqttException | JsonProcessingException e) {
                                     e.printStackTrace();
                                 }
@@ -107,7 +109,8 @@ public class WristbandSmartObject implements GenericSmartObject{
                                 try {
 
                                     String gpsTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, wristbandId, TELEMETRY_TOPIC, resourceEntry.getKey());
-                                    publishTelemetryData(gpsTopic, new TelemetryMessage<>(gpsSensorResource.getType(), updatedValue));
+                                    publishTelemetryData(gpsTopic, new TelemetryMessage<>(gpsSensorResource.getType()
+                                            , updatedValue.getGPSLocation()));
                                 } catch (MqttException | JsonProcessingException e) {
                                     e.printStackTrace();
                                 }
@@ -130,7 +133,7 @@ public class WristbandSmartObject implements GenericSmartObject{
                                     if(controlMessageOptional.isPresent() && controlMessageOptional.get().getType().equals(AlarmActuatorResource.RESOURCE_TYPE)){
                                         logger.info("New alarm message arrived");
                                         Boolean newAlarmValue = controlMessageOptional.get().getData();
-                                        alarmActuatorResource.setActive(newAlarmValue);
+                                        alarmActuatorResource.setValue(newAlarmValue);
                                     }
                                     else{
                                         logger.error("ERROR");

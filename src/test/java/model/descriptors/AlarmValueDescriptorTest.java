@@ -1,16 +1,17 @@
 package model.descriptors;
 
+import model.descriptors.wristband.AlarmValueDescriptor;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-class AlarmActuatorDescriptorTest {
+class AlarmValueDescriptorTest {
 
     @Test
     void refreshValue() {
-        AlarmActuatorDescriptor aad = new AlarmActuatorDescriptor();
+        AlarmValueDescriptor aad = new AlarmValueDescriptor();
         List<Boolean> randomList = new ArrayList<>();
         IntStream.range(0, 10).forEach( i -> {
             aad.refreshValue();

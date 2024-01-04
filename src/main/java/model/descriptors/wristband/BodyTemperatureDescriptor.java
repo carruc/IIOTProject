@@ -1,35 +1,40 @@
 package model.descriptors.wristband;
 
-public class BodyTemperatureDescriptor {
+import model.descriptors.GenericDescriptor;
+
+public class BodyTemperatureDescriptor extends GenericDescriptor<Double> {
 
     public static final Double MIN_BODY_TEMPERATURE = 30.0;
     public static final Double MAX_BODY_TEMPERATURE = 40.0;
     public static final Double MAX_BODY_TEMPERATURE_VARIATION = 1.0;
 
-    private Double bodyTemperature = 35.0;
+    public static final Double DEFAULT_BODY_TEMPERATURE = 35.0;
+
+    public static final String BODY_TEMPERATURE_UNIT = "°C";
+
 
     public BodyTemperatureDescriptor(){
-
+        super(DEFAULT_BODY_TEMPERATURE, BODY_TEMPERATURE_UNIT);
     }
 
     public BodyTemperatureDescriptor(Double bodyTemperature) {
-        this.bodyTemperature = bodyTemperature;
+        super(bodyTemperature, BODY_TEMPERATURE_UNIT);
     }
 
     public Double getBodyTemperature() {
-        return bodyTemperature;
+        return getValue();
     }
 
     public void setBodyTemperature(Double bodyTemperature) {
         if(bodyTemperature < MIN_BODY_TEMPERATURE)
-            this.bodyTemperature = MIN_BODY_TEMPERATURE;
+            setValue(MIN_BODY_TEMPERATURE);
         if(bodyTemperature > MAX_BODY_TEMPERATURE)
-            this.bodyTemperature = MAX_BODY_TEMPERATURE;
-        this.bodyTemperature = bodyTemperature;
+            setValue(MAX_BODY_TEMPERATURE);
+        setValue(bodyTemperature);
     }
 
     @Override
     public String toString() {
-        return "BodyTemperatureDescriptor{" + "bodyTemperature=" + bodyTemperature + '}';
+        return "BodyTemperatureDescriptor{" + "value=" + getBodyTemperature() + ", unit='" + getUnit() + '\'' + '}';
     }
 }

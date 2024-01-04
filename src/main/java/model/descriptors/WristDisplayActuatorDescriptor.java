@@ -5,11 +5,11 @@ package model.descriptors;
  */
 public class WristDisplayActuatorDescriptor extends GenericDescriptor<String> {
     public WristDisplayActuatorDescriptor(String value) {
-        super(value);
+        super(value, "");
     }
 
-    @Override
+    /*@Override
     public void refreshValue() {
 
-    }
+    }*/
 }

@@ -4,7 +4,7 @@ package model.descriptors;
  * Model for thermostat-related temperature sensors.
  * Value represents the temperature in degrees-Celsius.
  */
-public abstract class GenericTemperatureSensorDescriptor extends GenericDescriptor<Double> {
+/*public abstract class GenericTemperatureSensorDescriptor extends GenericDescriptor<Double> {
     private static final String TEMPERATURE_SENSOR_UNIT = "C";
     String temperatureSensorType;
 
@@ -27,4 +27,8 @@ public abstract class GenericTemperatureSensorDescriptor extends GenericDescript
         string.append("}");
         return string.toString();
     }
+}*/
+
+public class GenericTemperatureSensorDescriptor{
+
 }

@@ -1,7 +1,6 @@
 package process;
 
 import device.WristbandSmartObject;
-import model.descriptors.AlarmActuatorDescriptor;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -18,6 +17,7 @@ public class WristbandProcess {
 
     private static final Logger logger = LoggerFactory.getLogger(WristbandProcess.class);
 
+    private static int ONE_MINUTE_IN_MILLISECONDS = 60000;
     private static int STOP_MINUTE = 3;
 
     public static void main(String[] args) {
@@ -37,6 +37,7 @@ public class WristbandProcess {
             mqttClient.connect(options);
 
             logger.info("MQTT client Connected ! Client id: {}",wristbandId);
+            System.out.println("Connected");
 
             WristbandSmartObject wristbandSmartObject = new WristbandSmartObject();
 
@@ -52,7 +53,7 @@ public class WristbandProcess {
 
             //Stop the wristband after STOP_MINUTE
             try{
-                Thread.sleep(60000 * STOP_MINUTE);
+                Thread.sleep(ONE_MINUTE_IN_MILLISECONDS * STOP_MINUTE);
                 wristbandSmartObject.stop();
             } catch (InterruptedException e){
                 e.printStackTrace();

@@ -4,11 +4,11 @@ package model.descriptors;
 public class VideocameraDescriptor extends GenericDescriptor<Integer>{
 
     public VideocameraDescriptor(Integer value) {
-        super(value);
+        super(value, "");
     }
 
-    @Override
+    /*@Override
     public void refreshValue() {
 
-    }
+    }*/
 }

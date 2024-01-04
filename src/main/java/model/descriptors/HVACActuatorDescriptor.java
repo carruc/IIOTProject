@@ -7,11 +7,11 @@ package model.descriptors;
 public class HVACActuatorDescriptor extends GenericDescriptor<Boolean>{
 
     public HVACActuatorDescriptor(Boolean value) {
-        super(value);
+        super(value, "");
     }
 
-    @Override
+    /*@Override
     public void refreshValue() {
 
-    }
+    }*/
 }

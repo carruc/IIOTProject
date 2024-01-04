@@ -38,13 +38,13 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
 
     private void init() {
         healthcareData = new HealthcareDataDescriptor(new BPMDescriptor(), new OxygenDescriptor(), new BodyTemperatureDescriptor());
+        timer = new Timer();
         random = new Random();
         startPeriodicTask();
     }
 
-    private void startPeriodicTask(){
-        try{
-            timer = new Timer();
+    private void startPeriodicTask() {
+        try {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -54,7 +54,7 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
                     notifyUpdate(healthcareData);
                 }
             }, HEALTHCARE_DATA_UPDATE_STARTING_DELAY, HEALTHCARE_DATA_UPDATE_PERIOD);
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -64,12 +64,11 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
 
         healthcareSensorResource.addDataListener(new ResourceDataListener<HealthcareDataDescriptor>() {
             @Override
-            public void onDataChanged(GenericResource<HealthcareDataDescriptor> resource,
-                                      HealthcareDataDescriptor updatedValue) {
-                if(resource != null && updatedValue != null){
+            public void onDataChanged(GenericResource<HealthcareDataDescriptor> resource, HealthcareDataDescriptor updatedValue) {
+                if (resource != null && updatedValue != null) {
                     logger.info("Device: {} -> New healthcare sensor value: {}", resource.getId(), updatedValue);
                     System.out.println("Device " + resource.getId() + "Value: " + updatedValue);
-                } else{
+                } else {
                     logger.error("Error");
                     //System.out.println("Error");
                 }
