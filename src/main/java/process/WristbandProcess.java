@@ -1,6 +1,7 @@
 package process;
 
 import device.WristbandSmartObject;
+import model.descriptors.wristband.PersonDataDescriptor;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import resource.AlarmActuatorResource;
 import resource.GPSSensorResource;
 import resource.HealthcareSensorResource;
+import resource.PersonDataResource;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -22,7 +24,8 @@ public class WristbandProcess {
 
     public static void main(String[] args) {
         try{
-            String wristbandId = UUID.randomUUID().toString();
+            //String wristbandId = UUID.randomUUID().toString();
+            String wristbandId = "wristband47"; //valore fisso, altrimenti comparirebbero troppi messaggi retained
 
             MqttClientPersistence persistence = new MemoryPersistence();
             IMqttClient mqttClient = new MqttClient(String.format("tcp://%s:%d", ProcessConfiguration.MQTT_BROKER_IP,
@@ -41,11 +44,13 @@ public class WristbandProcess {
 
             WristbandSmartObject wristbandSmartObject = new WristbandSmartObject();
 
+            PersonDataDescriptor personDataDescriptor = new PersonDataDescriptor("FPPCVL", "Filippo", "Cavalieri", 21);
             wristbandSmartObject.init(wristbandId,mqttClient,new HashMap<>(){
                 {
                     put("healthcare", new HealthcareSensorResource());
                     put("gps", new GPSSensorResource());
                     put("alarm", new AlarmActuatorResource());
+                    put("personal_info", new PersonDataResource(personDataDescriptor));
                 }
             });
 

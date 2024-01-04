@@ -9,6 +9,7 @@ import message.TelemetryMessage;
 import model.descriptors.wristband.GPSLocationDescriptor;
 import model.descriptors.wristband.HealthcareDataDescriptor;
 import model.descriptors.wristband.OxygenDescriptor;
+import model.descriptors.wristband.PersonDataDescriptor;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -33,6 +34,8 @@ public class WristbandSmartObject implements GenericSmartObject{
     private static final String TELEMETRY_TOPIC = "telemetry";
 
     private static final String CONTROL_TOPIC = "control";
+
+    private static final String INFO_TOPIC = "info";
 
     private String wristbandId;
 
@@ -86,6 +89,17 @@ public class WristbandSmartObject implements GenericSmartObject{
 
                     logger.info("Registering to Resource {} (id: {}) notifications ...", wristbandResource.getType(), wristbandResource.getId());
 
+                    if(wristbandResource.getType().equals(PersonDataResource.RESOURCE_TYPE)){
+                        try{
+                            PersonDataResource personDataResource = (PersonDataResource) wristbandResource;
+
+                            String personalInfoTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, wristbandId, INFO_TOPIC, resourceEntry.getKey());
+                            publishInfoPersonalData(personalInfoTopic, personDataResource.getPersonDataDescriptor());
+                        } catch (Exception e){
+                            logger.error("ERROR");
+                        }
+
+                    }
                     if (wristbandResource.getType().equals(HealthcareSensorResource.RESOURCE_TYPE)) {
                         HealthcareSensorResource healthcareSensorResource = (HealthcareSensorResource) wristbandResource;
 
@@ -154,13 +168,34 @@ public class WristbandSmartObject implements GenericSmartObject{
     }
 
 
+    private void publishInfoPersonalData(String topic, PersonDataDescriptor personDataDescriptor) throws MqttException, JsonProcessingException {
+        if(this.mqttClient != null && this.mqttClient.isConnected() && topic != null && personDataDescriptor != null){
+            String messagePayload = mapper.writeValueAsString(personDataDescriptor);
+
+            logger.info("Sending to topic: {} -> Data: {}", topic, messagePayload);
+            System.out.println("Topic: " + topic + " Payload: " + messagePayload);
+
+            MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
+            mqttMessage.setQos(0);
+            mqttMessage.setRetained(true);
+
+            mqttClient.publish(topic, mqttMessage);
+
+            logger.info("Data Correctly Published to topic: {}", topic);
+
+        }
+        else
+            logger.error("Error: Topic or Msg = Null or MQTT Client is not Connected !");
+    }
+
     private void publishTelemetryData(String topic, Optional<String> payload) throws MqttException,
             JsonProcessingException {
 
         if(this.mqttClient != null && this.mqttClient.isConnected() && payload.isPresent() && topic != null){
             String messagePayload = payload.get();
 
-            logger.info("Sending to topic: {} -> Data: {}", topic, payload);
+            logger.info("Sending to topic: {} -> Data: {}", topic, messagePayload);
+            System.out.println("Topic: " + topic + " Payload: " + messagePayload);
 
             MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
             mqttMessage.setQos(0);
@@ -217,7 +252,8 @@ public class WristbandSmartObject implements GenericSmartObject{
             GPSLocationDescriptor gpsLocationDescriptor = gpsSensorResource.getGpsLocationDescriptor();
 
             SenMLRecord firstRecord = new SenMLRecord();
-            firstRecord.setBn(gpsLocationDescriptor.getUnit());
+            firstRecord.setBn(gpsSensorResource.getType());
+            firstRecord.setBu(gpsLocationDescriptor.getUnit());
             firstRecord.setT(System.currentTimeMillis());
 
             SenMLRecord latitudeRecord = new SenMLRecord();

@@ -15,10 +15,12 @@ public class AlarmActuatorResource extends GenericResource<AlarmValueDescriptor>
 
     public AlarmActuatorResource(){
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
+        alarmValueDescriptor = new AlarmValueDescriptor();
     }
 
     public AlarmActuatorResource(String id, String type){
         super(id, type);
+        alarmValueDescriptor = new AlarmValueDescriptor();
     }
 
     public Boolean getValue() {
