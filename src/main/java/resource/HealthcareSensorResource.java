@@ -59,6 +59,10 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
         }
     }
 
+    public HealthcareDataDescriptor getHealthcareData() {
+        return healthcareData;
+    }
+
     public static void main(String[] args) {
         HealthcareSensorResource healthcareSensorResource = new HealthcareSensorResource();
 

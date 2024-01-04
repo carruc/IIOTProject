@@ -1,5 +1,6 @@
 package device;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,6 +8,7 @@ import message.ControlMessage;
 import message.TelemetryMessage;
 import model.descriptors.wristband.GPSLocationDescriptor;
 import model.descriptors.wristband.HealthcareDataDescriptor;
+import model.descriptors.wristband.OxygenDescriptor;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.IMqttMessageListener;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -15,7 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import process.WristbandProcess;
 import resource.*;
+import utils.SenMLPack;
+import utils.SenMLRecord;
 
+import javax.swing.text.html.Option;
 import java.util.Map;
 import java.util.Optional;
 
@@ -39,6 +44,7 @@ public class WristbandSmartObject implements GenericSmartObject{
 
     public WristbandSmartObject() {
         this.mapper = new ObjectMapper();
+        this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     public void init(String wristbandId, IMqttClient mqttClient, Map<String, GenericResource<?>> resourceMap) {
@@ -89,9 +95,8 @@ public class WristbandSmartObject implements GenericSmartObject{
                                 try {
 
                                     String healthcareTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, wristbandId, TELEMETRY_TOPIC, resourceEntry.getKey());
-
-                                    publishTelemetryData(healthcareTopic,
-                                            new TelemetryMessage<>(healthcareSensorResource.getType(), updatedValue));
+                                    Optional<String> healthcarePayload = getJsonSenmlHealthcareData(healthcareSensorResource);
+                                    publishTelemetryData(healthcareTopic, healthcarePayload);
                                 } catch (MqttException | JsonProcessingException e) {
                                     e.printStackTrace();
                                 }
@@ -107,10 +112,9 @@ public class WristbandSmartObject implements GenericSmartObject{
                             public void onDataChanged(GenericResource<GPSLocationDescriptor> resource,
                                                       GPSLocationDescriptor updatedValue) {
                                 try {
-
                                     String gpsTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, wristbandId, TELEMETRY_TOPIC, resourceEntry.getKey());
-                                    publishTelemetryData(gpsTopic, new TelemetryMessage<>(gpsSensorResource.getType()
-                                            , updatedValue.getGPSLocation()));
+                                    Optional<String> gpsPayload = getJsonSenmlGPSLocation(gpsSensorResource);
+                                    publishTelemetryData(gpsTopic, gpsPayload);
                                 } catch (MqttException | JsonProcessingException e) {
                                     e.printStackTrace();
                                 }
@@ -128,12 +132,10 @@ public class WristbandSmartObject implements GenericSmartObject{
                             this.mqttClient.subscribe(alarmTopic, new IMqttMessageListener() {
                                 @Override
                                 public void messageArrived(String topic, MqttMessage message) throws Exception {
-                                    Optional<ControlMessage<Boolean>> controlMessageOptional =
-                                            parseControlAlarmMessage(message);
-                                    if(controlMessageOptional.isPresent() && controlMessageOptional.get().getType().equals(AlarmActuatorResource.RESOURCE_TYPE)){
+                                    Optional<Boolean> receivedAlarmValue = parseControlAlarmMessage(message);
+                                    if(receivedAlarmValue.isPresent()){
                                         logger.info("New alarm message arrived");
-                                        Boolean newAlarmValue = controlMessageOptional.get().getData();
-                                        alarmActuatorResource.setValue(newAlarmValue);
+                                        alarmActuatorResource.setValue(receivedAlarmValue.get());
                                     }
                                     else{
                                         logger.error("ERROR");
@@ -152,13 +154,13 @@ public class WristbandSmartObject implements GenericSmartObject{
     }
 
 
-    private void publishTelemetryData(String topic, TelemetryMessage<?> telemetryMessage) throws MqttException,
+    private void publishTelemetryData(String topic, Optional<String> payload) throws MqttException,
             JsonProcessingException {
-        logger.info("Sending to topic: {} -> Data: {}", topic, telemetryMessage);
 
-        if(this.mqttClient != null && this.mqttClient.isConnected() && telemetryMessage != null && topic != null){
+        if(this.mqttClient != null && this.mqttClient.isConnected() && payload.isPresent() && topic != null){
+            String messagePayload = payload.get();
 
-            String messagePayload = mapper.writeValueAsString(telemetryMessage);
+            logger.info("Sending to topic: {} -> Data: {}", topic, payload);
 
             MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
             mqttMessage.setQos(0);
@@ -172,14 +174,85 @@ public class WristbandSmartObject implements GenericSmartObject{
             logger.error("Error: Topic or Msg = Null or MQTT Client is not Connected !");
     }
 
-    private Optional<ControlMessage<Boolean>> parseControlAlarmMessage(MqttMessage mqttMessage){
+    private Optional<String> getJsonSenmlHealthcareData(HealthcareSensorResource healthcareSensorResource){
+        try{
+            SenMLPack senMLPack = new SenMLPack();
+
+            HealthcareDataDescriptor healthcareDataDescriptor = healthcareSensorResource.getHealthcareData();
+
+            SenMLRecord firstRecord = new SenMLRecord();
+            firstRecord.setBn(healthcareSensorResource.getType());
+            firstRecord.setT(System.currentTimeMillis());
+
+            SenMLRecord BPMRecord = new SenMLRecord();
+            BPMRecord.setN("BPM");
+            BPMRecord.setV(healthcareDataDescriptor.getBPM());
+            BPMRecord.setU(healthcareDataDescriptor.getBPMUnit());
+
+            SenMLRecord oxygenRecord = new SenMLRecord();
+            oxygenRecord.setN("oxygen");
+            oxygenRecord.setV(healthcareDataDescriptor.getOxygen());
+            oxygenRecord.setU(healthcareDataDescriptor.getOxygenUnit());
+
+            SenMLRecord bodyTemperatureRecord = new SenMLRecord();
+            bodyTemperatureRecord.setN("body_temperature");
+            bodyTemperatureRecord.setV(healthcareDataDescriptor.getBodyTemperature());
+            bodyTemperatureRecord.setU(healthcareDataDescriptor.getBodyTemperatureUnit());
+
+            senMLPack.add(firstRecord);
+            senMLPack.add(BPMRecord);
+            senMLPack.add(oxygenRecord);
+            senMLPack.add(bodyTemperatureRecord);
+
+            return Optional.of(mapper.writeValueAsString(senMLPack));
+        } catch(Exception e){
+            return Optional.empty();
+        }
+    }
+
+    private Optional<String> getJsonSenmlGPSLocation(GPSSensorResource gpsSensorResource){
+        try{
+            SenMLPack senMLPack = new SenMLPack();
+
+            GPSLocationDescriptor gpsLocationDescriptor = gpsSensorResource.getGpsLocationDescriptor();
+
+            SenMLRecord firstRecord = new SenMLRecord();
+            firstRecord.setBn(gpsLocationDescriptor.getUnit());
+            firstRecord.setT(System.currentTimeMillis());
+
+            SenMLRecord latitudeRecord = new SenMLRecord();
+            latitudeRecord.setN("latitude");
+            latitudeRecord.setV(gpsLocationDescriptor.getGPSLocation().getLatitude());
+
+            SenMLRecord longitudeRecord = new SenMLRecord();
+            longitudeRecord.setN("longitude");
+            longitudeRecord.setV(gpsLocationDescriptor.getGPSLocation().getLongitude());
+
+            SenMLRecord elevationRecord = new SenMLRecord();
+            elevationRecord.setN("elevation");
+            elevationRecord.setV(gpsLocationDescriptor.getGPSLocation().getElevation());
+
+            senMLPack.add(firstRecord);
+            senMLPack.add(latitudeRecord);
+            senMLPack.add(longitudeRecord);
+            senMLPack.add(elevationRecord);
+
+            return Optional.of(mapper.writeValueAsString(senMLPack));
+        } catch(Exception e){
+            return Optional.empty();
+        }
+    }
+
+    private Optional<Boolean> parseControlAlarmMessage(MqttMessage mqttMessage){
         try{
             if(mqttMessage == null){
                 return Optional.empty();
             }
             String payloadString = new String(mqttMessage.getPayload());
-            return Optional.ofNullable(mapper.readValue(payloadString,
-                    new TypeReference<ControlMessage<Boolean>>() {}));
+
+            SenMLPack receivedPack = mapper.readValue(payloadString, SenMLPack.class);
+
+            return Optional.ofNullable(receivedPack.get(0).getVb());
         } catch(Exception e){
             return Optional.empty();
         }

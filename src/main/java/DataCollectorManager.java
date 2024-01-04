@@ -34,7 +34,7 @@ public class DataCollectorManager {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     byte[] payload = message.getPayload();
-                    System.out.println("Topic: " + topic + "Payload: " + new String(payload));
+                    System.out.println("Topic: " + topic + " Payload: " + new String(payload));
                 }
             });
         } catch(Exception e){

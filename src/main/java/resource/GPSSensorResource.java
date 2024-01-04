@@ -91,6 +91,10 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
         }
     }
 
+    public GPSLocationDescriptor getGpsLocationDescriptor() {
+        return gpsLocationDescriptor;
+    }
+
     public static void main(String[] args) {
         GPSSensorResource gpsSensorResource = new GPSSensorResource();
         gpsSensorResource.addDataListener(new ResourceDataListener<GPSLocationDescriptor>() {
