@@ -1,13 +1,14 @@
-package resource;
+package resource.wristband;
 
 import model.descriptors.wristband.PersonDataDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import resource.GenericResource;
 
 import java.util.UUID;
 
-public class PersonDataResource extends GenericResource<PersonDataDescriptor>{
-    private static final Logger logger = LoggerFactory.getLogger(PersonDataResource.class);
+public class PersonDataResource extends GenericResource<PersonDataDescriptor> {
+    private static final Logger logger = LogManager.getLogger();
 
     public static final String RESOURCE_TYPE = "iot:parameter:person";
 

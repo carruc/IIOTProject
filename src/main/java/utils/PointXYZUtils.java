@@ -1,4 +1,6 @@
-package model.point;
+package utils;
+
+import model.point.PointXYZ;
 
 public class PointXYZUtils {
 

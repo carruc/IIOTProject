@@ -8,6 +8,10 @@ public class PointXYZ {
     private double longitude;
     private double elevation;
 
+    public PointXYZ(){
+
+    }
+
     public PointXYZ(double latitude, double longitude, double elevation) {
         this.latitude = latitude;
         this.longitude = longitude;

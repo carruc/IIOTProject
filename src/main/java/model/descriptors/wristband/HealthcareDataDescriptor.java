@@ -21,6 +21,12 @@ public class HealthcareDataDescriptor {
         this.bodyTemperatureDescriptor = bodyTemperatureDescriptor;
     }
 
+    public HealthcareDataDescriptor(Double BPM, Double oxygen, Double bodyTemperature) {
+        this.BPMDescriptor = new BPMDescriptor(BPM);
+        this.oxygenDescriptor = new OxygenDescriptor(oxygen);
+        this.bodyTemperatureDescriptor = new BodyTemperatureDescriptor(bodyTemperature);
+    }
+
     public Double getBPM() {
         return BPMDescriptor.getBPM();
     }
@@ -44,7 +50,7 @@ public class HealthcareDataDescriptor {
         bodyTemperatureDescriptor.setBodyTemperature(bodyTemperature);
     }
 
-    public String getBPMUnit() {
+    /*public String getBPMUnit() {
         return BPMDescriptor.getUnit();
     }
 
@@ -54,7 +60,7 @@ public class HealthcareDataDescriptor {
 
     public String getBodyTemperatureUnit() {
         return bodyTemperatureDescriptor.getUnit();
-    }
+    }*/
 
     @Override
     public String toString() {

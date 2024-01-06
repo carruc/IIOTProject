@@ -1,11 +1,14 @@
-package resource;
+package resource.wristband;
 
 import model.descriptors.wristband.BPMDescriptor;
 import model.descriptors.wristband.BodyTemperatureDescriptor;
 import model.descriptors.wristband.HealthcareDataDescriptor;
 import model.descriptors.wristband.OxygenDescriptor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import resource.GenericResource;
+import resource.ResourceDataListener;
 
 import java.util.Random;
 import java.util.Timer;
@@ -13,7 +16,7 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 public class HealthcareSensorResource extends GenericResource<HealthcareDataDescriptor> {
-    private static final Logger logger = LoggerFactory.getLogger(HealthcareSensorResource.class);
+    private static final Logger logger = LogManager.getLogger();
 
     public static final String RESOURCE_TYPE = "iot:sensor:healthcare";
 
@@ -22,7 +25,7 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
     private Timer timer;
 
     private static final long HEALTHCARE_DATA_UPDATE_STARTING_DELAY = 5000;
-    private static final long HEALTHCARE_DATA_UPDATE_PERIOD = 5000;
+    private static final long HEALTHCARE_DATA_UPDATE_PERIOD = 15000;
 
     private Random random;
 

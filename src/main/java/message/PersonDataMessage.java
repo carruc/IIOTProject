@@ -1,6 +1,8 @@
-package model.descriptors.wristband;
+package message;
 
-public class PersonDataDescriptor {
+import model.descriptors.wristband.PersonDataDescriptor;
+
+public class PersonDataMessage extends GenericMessage{
     private String CF;
     private String name;
     private String lastname;
@@ -8,17 +10,22 @@ public class PersonDataDescriptor {
     private int roomNumber;
     private String wristbandId;
 
-    public PersonDataDescriptor() {
+    public PersonDataMessage(){
 
     }
 
-    public PersonDataDescriptor(String CF, String name, String lastname, int age, int roomNumber, String wristbandId) {
+    public PersonDataMessage(String CF, String name, String lastname, int age, int roomNumber, String wristbandId) {
         this.CF = CF;
         this.name = name;
         this.lastname = lastname;
         this.age = age;
         this.roomNumber = roomNumber;
         this.wristbandId = wristbandId;
+    }
+
+    public PersonDataMessage(PersonDataDescriptor personDataDescriptor){
+        this(personDataDescriptor.getCF(), personDataDescriptor.getName(), personDataDescriptor.getLastname(),
+                personDataDescriptor.getAge(), personDataDescriptor.getRoomNumber(), personDataDescriptor.getWristbandId());
     }
 
     public String getCF() {
@@ -67,10 +74,5 @@ public class PersonDataDescriptor {
 
     public void setWristbandId(String wristbandId) {
         this.wristbandId = wristbandId;
-    }
-
-    @Override
-    public String toString() {
-        return "PersonDataDescriptor{" + "CF='" + CF + '\'' + ", name='" + name + '\'' + ", lastname='" + lastname + '\'' + ", age=" + age + ", roomNumber=" + roomNumber + ", wristbandId='" + wristbandId + '\'' + '}';
     }
 }

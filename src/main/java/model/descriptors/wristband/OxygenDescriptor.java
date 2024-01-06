@@ -9,7 +9,7 @@ import model.descriptors.GenericDescriptor;
 public class OxygenDescriptor extends GenericDescriptor<Double> {
     public static final Double MIN_OXYGEN = 60.0;
     public static final Double MAX_OXYGEN = 100.0;
-    public static final Double MAX_OXYGEN_VARIATION = 1.0;
+    public static final Double MAX_OXYGEN_VARIATION = 0.5;
 
     public static final Double DEFAULT_OXYGEN = 95.0;
 

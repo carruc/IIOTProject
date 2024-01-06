@@ -1,13 +1,13 @@
 package resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GenericResource<T> {
-    private static final Logger logger = LoggerFactory.getLogger(GenericResource.class);
+    private static final Logger logger = LogManager.getLogger();
 
     protected List<ResourceDataListener<T>> resourceDataListeners;
 

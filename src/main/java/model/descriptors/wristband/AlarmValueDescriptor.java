@@ -6,12 +6,13 @@ import model.descriptors.GenericDescriptor;
  * Value represents ON/OFF state.
  */
 public class AlarmValueDescriptor extends GenericDescriptor<Boolean> {
-    public static final String BPM_UNIT = "Boolean";
+
+    public static final String ALARM_VALUE_UNIT = "Boolean";
     public AlarmValueDescriptor(){
-        super(false, BPM_UNIT);
+        super(false, ALARM_VALUE_UNIT);
     }
     public AlarmValueDescriptor(Boolean value) {
-        super(value, BPM_UNIT);
+        super(value, ALARM_VALUE_UNIT);
     }
 
     @Override

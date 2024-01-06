@@ -1,22 +1,20 @@
-package resource;
+package resource.wristband;
 
 import io.jenetics.jpx.GPX;
-import io.jenetics.jpx.Track;
-import io.jenetics.jpx.TrackSegment;
 import io.jenetics.jpx.WayPoint;
 import model.descriptors.wristband.*;
 import model.point.PointXYZ;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import resource.GenericResource;
+import resource.ResourceDataListener;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
-    private static final Logger logger = LoggerFactory.getLogger(GPSSensorResource.class);
+    private static final Logger logger = LogManager.getLogger();
 
-    private static final String GPX_FILE_NAME = "tracks/demo.gpx";
+    private static final String GPX_FILE_NAME = "tracks/simulated_resident_path.gpx";
 
     public static final String RESOURCE_TYPE = "iot:sensor:gps";
 
@@ -29,7 +27,7 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
     private Timer timer;
 
     private static final long GPS_LOCATION_UPDATE_STARTING_DELAY = 5000;
-    private static final long GPS_LOCATION_UPDATE_PERIOD = 10000;
+    private static final long GPS_LOCATION_UPDATE_PERIOD = 2000;
 
     public GPSSensorResource() {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
@@ -44,10 +42,7 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
     private void init(){
         try {
             gpsLocationDescriptor = new GPSLocationDescriptor();
-            this.wayPointList = GPX.read(GPX_FILE_NAME).tracks()
-                    .flatMap(Track::segments)
-                    .flatMap(TrackSegment::points)
-                    .collect(Collectors.toList());
+            this.wayPointList = GPX.read(GPX_FILE_NAME).getWayPoints();
             this.wayPointListIterator = this.wayPointList.listIterator();
             timer = new Timer();
             startPeriodicTask();
@@ -65,10 +60,6 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
                     if(wayPointListIterator.hasNext()){
                         WayPoint currentWayPoint = wayPointListIterator.next();
 
-                        //logger.info("{} -> Lat:{}, Lng:{}",
-                        //        RESOURCE_TYPE,
-                        //        currentWayPoint.getLatitude(),
-                        //        currentWayPoint.getLongitude());
 
                         gpsLocationDescriptor.setGPSLocation(new PointXYZ(currentWayPoint.getLatitude().doubleValue(),
                                 currentWayPoint.getLongitude().doubleValue(),
@@ -79,7 +70,6 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
                     }
                     //At the end of the WayPoint List
                     else{
-                        logger.info("Reversing WayPoint List ...");
                         Collections.reverse(wayPointList);
                         wayPointListIterator = wayPointList.listIterator();
                         logger.info("Iterating backward on the GPS Waypoint List ...");
