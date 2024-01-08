@@ -12,15 +12,14 @@ repositories {
 dependencies {
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5'
 
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.22.1'
-    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.22.1'
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.4.14'
+    implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.14'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.9'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.16.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.16.1'
 
     implementation group: 'io.jenetics', name: 'jpx', version: '2.0.0'
-
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.4.14'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'

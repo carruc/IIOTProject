@@ -5,8 +5,8 @@ import model.descriptors.wristband.BodyTemperatureDescriptor;
 import model.descriptors.wristband.HealthcareDataDescriptor;
 import model.descriptors.wristband.OxygenDescriptor;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import resource.GenericResource;
 import resource.ResourceDataListener;
 
@@ -16,7 +16,7 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 public class HealthcareSensorResource extends GenericResource<HealthcareDataDescriptor> {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LoggerFactory.getLogger(HealthcareSensorResource.class);
 
     public static final String RESOURCE_TYPE = "iot:sensor:healthcare";
 

@@ -5,11 +5,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import message.*;
 import model.descriptors.wristband.AlarmValueDescriptor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import process.WristbandProcess;
 import resource.*;
 import resource.wristband.AlarmActuatorResource;
@@ -23,7 +23,7 @@ import java.util.Optional;
 
 public class WristbandSmartObject implements GenericSmartObject {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LoggerFactory.getLogger(WristbandSmartObject.class);
 
     private static final String BASIC_TOPIC = "wristbands";
 

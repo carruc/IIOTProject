@@ -3,9 +3,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import message.*;
 import model.descriptors.wristband.*;
 import model.point.PointXYZ;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.PointXYZUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import process.ProcessConfiguration;
@@ -13,7 +13,7 @@ import process.ProcessConfiguration;
 import java.util.*;
 
 public class DataCollectorManager {
-    private final static Logger logger = LogManager.getLogger();
+    private final static Logger logger = LoggerFactory.getLogger(DataCollectorManager.class);
 
     private static final String BASE_WRISTBAND_TOPIC = "wristbands";
     private static final String WRISTBAND_TELEMETRY_TOPIC = "wristbands/+/telemetry/+";

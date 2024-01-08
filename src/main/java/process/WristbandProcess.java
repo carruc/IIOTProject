@@ -2,11 +2,11 @@ package process;
 
 import device.WristbandSmartObject;
 import model.descriptors.wristband.PersonDataDescriptor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import resource.wristband.AlarmActuatorResource;
 import resource.wristband.GPSSensorResource;
 import resource.wristband.HealthcareSensorResource;
@@ -14,9 +14,10 @@ import resource.wristband.PersonDataResource;
 
 import java.util.HashMap;
 
+
 public class WristbandProcess {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LoggerFactory.getLogger(WristbandProcess.class);
 
     private static int ONE_MINUTE_IN_MILLISECONDS = 60000;
     private static int STOP_MINUTE = 1;

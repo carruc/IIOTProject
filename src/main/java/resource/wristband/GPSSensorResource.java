@@ -4,15 +4,15 @@ import io.jenetics.jpx.GPX;
 import io.jenetics.jpx.WayPoint;
 import model.descriptors.wristband.*;
 import model.point.PointXYZ;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import resource.GenericResource;
 import resource.ResourceDataListener;
 
 import java.util.*;
 
 public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LoggerFactory.getLogger(GPSSensorResource.class);
 
     private static final String GPX_FILE_NAME = "tracks/simulated_resident_path.gpx";
 
