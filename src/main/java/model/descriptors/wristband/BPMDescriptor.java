@@ -2,8 +2,7 @@ package model.descriptors.wristband;
 
 import model.descriptors.GenericDescriptor;
 
-/** ECG sensor model for BPM monitoring.
- */
+
 public class BPMDescriptor extends GenericDescriptor<Double> {
 
     public static final Double MIN_BPM = 20.0;

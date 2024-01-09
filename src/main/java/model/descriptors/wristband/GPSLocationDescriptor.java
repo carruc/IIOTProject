@@ -3,8 +3,6 @@ package model.descriptors.wristband;
 import model.descriptors.GenericDescriptor;
 import model.point.PointXYZ;
 
-/** Three-dimensional GPS location model. Uses proprietary class "PointXYZ".
- */
 public class GPSLocationDescriptor extends GenericDescriptor<PointXYZ> {
 
     public static final PointXYZ DEFAULT_GPS_LOCATION = new PointXYZ(0, 0, 0);

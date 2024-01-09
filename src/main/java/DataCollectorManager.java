@@ -58,15 +58,15 @@ public class DataCollectorManager {
 
             mqttClient.connect(options);
 
-            logger.info("CONNECTED");
-            System.out.println("Connected");
+            logger.info("Data collector and manager connected to the MQTT Broker");
 
             mqttClient.subscribe(WRISTBAND_INFO_TOPIC, new IMqttMessageListener() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     try {
                         byte[] payload = message.getPayload();
-                        System.out.println("Topic: " + topic + " Payload: " + new String(payload));
+                        logger.info("Message received at topic: {} Payload:{}", topic, new String(payload));
+
                         Optional<PersonDataDescriptor> personDataDescriptor = parseInfoPersonalData(message.getPayload());
 
                         if (personDataDescriptor.isPresent()) {
@@ -79,7 +79,7 @@ public class DataCollectorManager {
                                         new PersonHealthcareAndAlarmFlagDescriptor());
                             }
                         } else {
-                            System.out.println("Wrong format");
+                            throw new Exception();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -89,7 +89,7 @@ public class DataCollectorManager {
             mqttClient.subscribe(WRISTBAND_TELEMETRY_TOPIC, (topic, message) -> {
                 try {
                     byte[] payload = message.getPayload();
-                    System.out.println("Topic: " + topic + " Payload: " + new String(payload));
+                    logger.info("Message received at topic: {} Payload:{}", topic, new String(payload));
 
                     ArrayList<String> topicParts = new ArrayList<>(Arrays.asList(topic.split("/")));
                     String lastTopicPart = topicParts.get(topicParts.size() - 1);
@@ -111,7 +111,7 @@ public class DataCollectorManager {
                                 personFlagMap.get(personWristbandId).setHealthcareFlag(true);
                             }
                         } else {
-                            System.out.println("Wrong format");
+                            throw new Exception();
                         }
                     } else if (GPS_TOPIC.equals(lastTopicPart)) {
                         Optional<GPSLocationDescriptor> receivedGPSLocation = parseTelemetryGPSLocation(payload);
@@ -119,7 +119,7 @@ public class DataCollectorManager {
                         if(receivedGPSLocation.isPresent()) {
                             GPSLocationDescriptor gpsLocationDescriptor = receivedGPSLocation.get();
                             System.out.println(PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
-                                    NURSING_HOUSE_LOCATION.getGPSLocation()));
+                             NURSING_HOUSE_LOCATION.getGPSLocation()));
                             String personWristbandId = topic.replace("wristbands/", "").replace("/telemetry/gps", "");
                             if(personFlagMap.get(personWristbandId).getAlarmFlag() == false && PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
                                     NURSING_HOUSE_LOCATION.getGPSLocation()) >= MAX_TOLERABLE_WRISTBAND_DISTANCE_METER){
@@ -131,7 +131,7 @@ public class DataCollectorManager {
                             }
                         }
                         else{
-                            System.out.println("Wrong format");
+                            throw new Exception();
                         }
                     }
                 } catch (Exception e) {
@@ -199,27 +199,24 @@ public class DataCollectorManager {
 
     private static void publishJsonFormattedMessage(IMqttClient mqttClient, String topic, GenericMessage payload,
                                                     boolean retained, int qos) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (mqttClient != null && mqttClient.isConnected() && topic != null && payload != null) {
-                        String messagePayload = mapper.writeValueAsString(payload);
+        new Thread(() -> {
+            try {
+                if (mqttClient != null && mqttClient.isConnected() && topic != null && payload != null) {
+                    String messagePayload = mapper.writeValueAsString(payload);
 
-                        System.out.println("Topic: " + topic + " Payload: " + messagePayload);
+                    logger.info("Sending to topic: {} -> Data: {}", topic, messagePayload);
 
-                        MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
-                        MqttMessage.validateQos(qos);
-                        mqttMessage.setQos(qos);
+                    MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
+                    MqttMessage.validateQos(qos);
+                    mqttMessage.setQos(qos);
 
-                        mqttClient.publish(topic, mqttMessage);
+                    mqttClient.publish(topic, mqttMessage);
 
-                        System.out.println("Data correctly send");
-                    } else
-                        logger.error("Error: Topic or Msg = Null or MQTT Client is not Connected !");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    logger.info("Data correctly published to topic: {}", topic);
+                } else
+                    logger.error("Error: topic or message = Null or MQTT Client is not connected!");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }).start();
     }

@@ -2,10 +2,6 @@ package model.descriptors.wristband;
 
 import model.descriptors.GenericDescriptor;
 
-/** Model for an O2 level sensor.
- * Value represents a percentage (0-100).
- */
-
 public class OxygenDescriptor extends GenericDescriptor<Double> {
     public static final Double MIN_OXYGEN = 60.0;
     public static final Double MAX_OXYGEN = 100.0;

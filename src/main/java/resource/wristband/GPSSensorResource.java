@@ -28,7 +28,7 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
     private Timer timer;
 
     private static final long GPS_LOCATION_UPDATE_STARTING_DELAY = 5000;
-    private static final long GPS_LOCATION_UPDATE_PERIOD = 300;
+    private static final long GPS_LOCATION_UPDATE_PERIOD = 10000;
 
     public GPSSensorResource() {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
@@ -100,7 +100,6 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
             public void onDataChanged(GenericResource<GPSLocationDescriptor> resource, GPSLocationDescriptor updatedValue) {
                 if (resource != null && updatedValue != null) {
                     logger.info("Device: {} -> New gps sensor value: {}", resource.getId(), updatedValue);
-                    System.out.println("Device " + resource.getId() + " Value: " + updatedValue);
                 } else {
                     logger.error("Error");
                 }

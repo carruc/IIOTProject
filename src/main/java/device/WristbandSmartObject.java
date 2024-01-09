@@ -3,6 +3,7 @@ package device;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import message.*;
 import model.descriptors.wristband.AlarmValueDescriptor;
 import model.descriptors.wristband.GPSLocationDescriptor;
@@ -56,7 +57,7 @@ public class WristbandSmartObject implements GenericSmartObject {
         this.mqttClient = mqttClient;
         this.resourceMap = resourceMap;
 
-        logger.info("Wristband Smart Object correctly created ! Resource Number: {}", resourceMap.keySet().size());
+        logger.info("Wristband Smart Object correctly created ! Number of hosted resources: {}", resourceMap.keySet().size());
     }
 
     /** WristBand behaviour **/
@@ -71,10 +72,10 @@ public class WristbandSmartObject implements GenericSmartObject {
             }
         } catch (Exception e) {
             logger.error("Error Starting the wristband ! Msg: {}", e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 
-    //TODO
     public void stop() {
 
     }
@@ -85,7 +86,7 @@ public class WristbandSmartObject implements GenericSmartObject {
                 if (resourceEntry.getKey() != null && resourceEntry.getValue() != null) {
                     GenericResource wristbandResource = resourceEntry.getValue();
 
-                    logger.info("Registering to Resource {} (id: {}) notifications ...", wristbandResource.getType(), wristbandResource.getId());
+                    logger.info("Registering to resource {} (id: {}) notifications ...", wristbandResource.getType(), wristbandResource.getId());
 
                     if (wristbandResource.getType().equals(PersonDataResource.RESOURCE_TYPE)) {
                         try {
@@ -94,7 +95,7 @@ public class WristbandSmartObject implements GenericSmartObject {
                             publishJsonFormattedMessage(personalInfoTopic,
                                     new PersonDataMessage(personDataResource.getPersonDataDescriptor()), true, QOS_0);
                         } catch (Exception e) {
-                            logger.error("ERROR");
+                            e.printStackTrace();
                         }
                     }
                     if (wristbandResource.getType().equals(HealthcareSensorResource.RESOURCE_TYPE)) {
@@ -138,15 +139,14 @@ public class WristbandSmartObject implements GenericSmartObject {
                                 byte[] payload = message.getPayload();
                                 Optional<AlarmValueDescriptor> receivedAlarmValue = parseControlAlarmMessage(payload);
                                 if (receivedAlarmValue.isPresent()) {
-                                    System.out.println("ALARM ALARM ALARM. New alarm value: " + receivedAlarmValue.get().getValue());
+                                    logger.info("New alarm value received: {}", receivedAlarmValue.get().getValue());
                                     alarmActuatorResource.setValue(receivedAlarmValue.get().getValue());
                                 } else {
-                                    logger.error("ERROR");
+                                    throw new Exception();
                                 }
                             });
                         } catch (Exception e) {
                             e.printStackTrace();
-                            logger.error("ERROR");
                         }
                     }
                 }
@@ -161,7 +161,6 @@ public class WristbandSmartObject implements GenericSmartObject {
             String messagePayload = mapper.writeValueAsString(payload);
 
             logger.info("Sending to topic: {} -> Data: {}", topic, messagePayload);
-            System.out.println("Topic: " + topic + " Payload: " + messagePayload);
             MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
             MqttMessage.validateQos(qos);
             mqttMessage.setQos(qos);
@@ -169,9 +168,9 @@ public class WristbandSmartObject implements GenericSmartObject {
                 mqttMessage.setRetained(true);
             mqttClient.publish(topic, mqttMessage);
 
-            logger.info("Data Correctly Published to topic: {}", topic);
+            logger.info("Data correctly published to topic: {}", topic);
         } else
-            logger.error("Error: Topic or Msg = Null or MQTT Client is not Connected !");
+            logger.error("Error: topic or message = Null or MQTT Client is not connected!");
     }
 
     /*private Optional<String> getJsonSenmlHealthcareData(HealthcareSensorResource healthcareSensorResource){

@@ -19,13 +19,13 @@ public class WristbandProcess {
 
     private static final Logger logger = LoggerFactory.getLogger(WristbandProcess.class);
 
-    private static int ONE_MINUTE_IN_MILLISECONDS = 60000;
-    private static int STOP_MINUTE = 1;
+    private static final int ONE_MINUTE_IN_MILLISECONDS = 60000;
+    private static final int STOP_MINUTE = 1;
 
     public static void main(String[] args) {
         try{
             //String wristbandId = UUID.randomUUID().toString();
-            String wristbandId = "wristband47"; //valore fisso, altrimenti comparirebbero troppi messaggi retained
+            String wristbandId = "wristband47"; //Fixed value for logging purposes
 
             MqttClientPersistence persistence = new MemoryPersistence();
             IMqttClient mqttClient = new MqttClient(String.format("tcp://%s:%d", ProcessConfiguration.MQTT_BROKER_IP,
@@ -39,8 +39,8 @@ public class WristbandProcess {
 
             mqttClient.connect(options);
 
-            logger.info("MQTT client Connected ! Client id: {}",wristbandId);
-            System.out.println("Connected");
+            logger.info("Wristband connected to the MQTT Broker. WristbandId: {}",wristbandId);
+
 
             WristbandSmartObject wristbandSmartObject = new WristbandSmartObject();
 
@@ -59,7 +59,7 @@ public class WristbandProcess {
 
             //Stop the wristband after STOP_MINUTE
             try{
-                Thread.sleep(ONE_MINUTE_IN_MILLISECONDS * STOP_MINUTE);
+                Thread.sleep((long) ONE_MINUTE_IN_MILLISECONDS * STOP_MINUTE);
                 wristbandSmartObject.stop();
             } catch (InterruptedException e){
                 e.printStackTrace();

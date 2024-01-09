@@ -76,10 +76,8 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
             public void onDataChanged(GenericResource<HealthcareDataDescriptor> resource, HealthcareDataDescriptor updatedValue) {
                 if (resource != null && updatedValue != null) {
                     logger.info("Device: {} -> New healthcare sensor value: {}", resource.getId(), updatedValue);
-                    System.out.println("Device " + resource.getId() + "Value: " + updatedValue);
                 } else {
                     logger.error("Error");
-                    //System.out.println("Error");
                 }
             }
         });
