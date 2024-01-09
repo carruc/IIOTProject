@@ -12,6 +12,8 @@ import process.ProcessConfiguration;
 
 import java.util.*;
 
+import static process.ProcessConfiguration.QOS_2;
+
 public class DataCollectorManager {
     private final static Logger logger = LoggerFactory.getLogger(DataCollectorManager.class);
 
@@ -81,57 +83,56 @@ public class DataCollectorManager {
                     }
                 }
             });
-            mqttClient.subscribe(WRISTBAND_TELEMETRY_TOPIC, new IMqttMessageListener() {
-                @Override
-                public void messageArrived(String topic, MqttMessage message) throws Exception {
-                    try {
-                        byte[] payload = message.getPayload();
-                        System.out.println("Topic: " + topic + " Payload: " + new String(payload));
+            mqttClient.subscribe(WRISTBAND_TELEMETRY_TOPIC, (topic, message) -> {
+                try {
+                    byte[] payload = message.getPayload();
+                    System.out.println("Topic: " + topic + " Payload: " + new String(payload));
 
-                        ArrayList<String> topicParts = new ArrayList<>(Arrays.asList(topic.split("/")));
-                        String lastTopicPart = topicParts.get(topicParts.size() - 1);
+                    ArrayList<String> topicParts = new ArrayList<>(Arrays.asList(topic.split("/")));
+                    String lastTopicPart = topicParts.get(topicParts.size() - 1);
 
-                        if (HEALTHCARE_TOPIC.equals(lastTopicPart)) {
-                            Optional<HealthcareDataDescriptor> receivedHealthcareData = parseTelemetryHealthcareData(payload);
+                    if (HEALTHCARE_TOPIC.equals(lastTopicPart)) {
+                        Optional<HealthcareDataDescriptor> receivedHealthcareData = parseTelemetryHealthcareData(payload);
 
-                            if (receivedHealthcareData.isPresent()) {
-                                HealthcareDataDescriptor healthcareDataDescriptor = receivedHealthcareData.get();
-                                String personWristbandId = topic.replace("wristbands/", "").replace("/telemetry/healthcare", "");
-                                personHealthcareDataMap.get(personWristbandId).addHealthcareData(healthcareDataDescriptor);
+                        if (receivedHealthcareData.isPresent()) {
+                            HealthcareDataDescriptor healthcareDataDescriptor = receivedHealthcareData.get();
+                            String personWristbandId = topic.replace("wristbands/", "").replace("/telemetry/healthcare", "");
+                            personHealthcareDataMap.get(personWristbandId).addHealthcareData(healthcareDataDescriptor);
 
 
-                                if (personFlagMap.get(personWristbandId).getHealthcareFlag() == false && (healthcareDataDescriptor.getBPM() < MIN_TOLERABLE_BPM_VALUE || healthcareDataDescriptor.getBPM() > MAX_TOLERABLE_BPM_VALUE
-                                    || healthcareDataDescriptor.getOxygen() < MIN_TOLERABLE_OXYGEN_VALUE
-                                    || healthcareDataDescriptor.getBodyTemperature() < MIN_TOLERABLE_BODY_TEMPERATURE_VALUE || healthcareDataDescriptor.getBodyTemperature() > MAX_TOLERABLE_BODY_TEMPERATURE_VALUE)) {
-                                    publishJsonFormattedMessage(mqttClient, IRREGULAR_HEALTHCARE_DATA_TOPIC, new IrregularHealthcareDataMessage(personHealthcareDataMap.get(personWristbandId).getPerson(), healthcareDataDescriptor));
-                                    personFlagMap.get(personWristbandId).setHealthcareFlag(true);
-                                }
-                            } else {
-                                System.out.println("Wrong format");
+                            if (personFlagMap.get(personWristbandId).getHealthcareFlag() == false && (healthcareDataDescriptor.getBPM() < MIN_TOLERABLE_BPM_VALUE || healthcareDataDescriptor.getBPM() > MAX_TOLERABLE_BPM_VALUE
+                                || healthcareDataDescriptor.getOxygen() < MIN_TOLERABLE_OXYGEN_VALUE
+                                || healthcareDataDescriptor.getBodyTemperature() < MIN_TOLERABLE_BODY_TEMPERATURE_VALUE || healthcareDataDescriptor.getBodyTemperature() > MAX_TOLERABLE_BODY_TEMPERATURE_VALUE)) {
+                                publishJsonFormattedMessage(mqttClient, IRREGULAR_HEALTHCARE_DATA_TOPIC,
+                                        new IrregularHealthcareDataMessage(personHealthcareDataMap.get(personWristbandId).getPerson(), healthcareDataDescriptor), false, QOS_2);
+                                personFlagMap.get(personWristbandId).setHealthcareFlag(true);
                             }
-                        } else if (GPS_TOPIC.equals(lastTopicPart)) {
-                            Optional<GPSLocationDescriptor> receivedGPSLocation = parseTelemetryGPSLocation(payload);
+                        } else {
+                            System.out.println("Wrong format");
+                        }
+                    } else if (GPS_TOPIC.equals(lastTopicPart)) {
+                        Optional<GPSLocationDescriptor> receivedGPSLocation = parseTelemetryGPSLocation(payload);
 
-                            if(receivedGPSLocation.isPresent()) {
-                                GPSLocationDescriptor gpsLocationDescriptor = receivedGPSLocation.get();
-                                System.out.println(PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
-                                        NURSING_HOUSE_LOCATION.getGPSLocation()));
-                                String personWristbandId = topic.replace("wristbands/", "").replace("/telemetry/gps", "");
-                                if(personFlagMap.get(personWristbandId).getAlarmFlag() == false && PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
-                                        NURSING_HOUSE_LOCATION.getGPSLocation()) >= MAX_TOLERABLE_WRISTBAND_DISTANCE_METER){
-                                    String alarmTopic = String.format("%s/%s/%s/%s", BASE_WRISTBAND_TOPIC,
-                                            personWristbandId, CONTROL_TOPIC, ALARM_TOPIC);
-                                    publishJsonFormattedMessage(mqttClient, alarmTopic, new ControlAlarmMessage(true));
-                                    personFlagMap.get(personWristbandId).setAlarmFlag(true);
-                                }
-                            }
-                            else{
-                                System.out.println("Wrong format");
+                        if(receivedGPSLocation.isPresent()) {
+                            GPSLocationDescriptor gpsLocationDescriptor = receivedGPSLocation.get();
+                            System.out.println(PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
+                                    NURSING_HOUSE_LOCATION.getGPSLocation()));
+                            String personWristbandId = topic.replace("wristbands/", "").replace("/telemetry/gps", "");
+                            if(personFlagMap.get(personWristbandId).getAlarmFlag() == false && PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
+                                    NURSING_HOUSE_LOCATION.getGPSLocation()) >= MAX_TOLERABLE_WRISTBAND_DISTANCE_METER){
+                                String alarmTopic = String.format("%s/%s/%s/%s", BASE_WRISTBAND_TOPIC,
+                                        personWristbandId, CONTROL_TOPIC, ALARM_TOPIC);
+                                publishJsonFormattedMessage(mqttClient, alarmTopic, new ControlAlarmMessage(true)
+                                        , false, QOS_2);
+                                personFlagMap.get(personWristbandId).setAlarmFlag(true);
                             }
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        else{
+                            System.out.println("Wrong format");
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         } catch (Exception e) {
@@ -143,7 +144,10 @@ public class DataCollectorManager {
     private static Optional<PersonDataDescriptor> parseInfoPersonalData(byte[] payload) throws JsonProcessingException {
         try {
             if (payload != null) {
-                return Optional.ofNullable(mapper.readValue(new String(payload), PersonDataDescriptor.class));
+                PersonDataMessage personDataMessage = mapper.readValue(new String(payload), PersonDataMessage.class);
+                return Optional.ofNullable(new PersonDataDescriptor(personDataMessage.getCF(),
+                        personDataMessage.getName(), personDataMessage.getLastname(), personDataMessage.getAge(),
+                        personDataMessage.getRoomNumber(), personDataMessage.getWristbandId()));
             } else {
                 return Optional.empty();
             }
@@ -178,7 +182,8 @@ public class DataCollectorManager {
         }
     }
 
-    private static void publishJsonFormattedMessage(IMqttClient mqttClient, String topic, GenericMessage payload) {
+    private static void publishJsonFormattedMessage(IMqttClient mqttClient, String topic, GenericMessage payload,
+                                                    boolean retained, int qos) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -189,7 +194,8 @@ public class DataCollectorManager {
                         System.out.println("Topic: " + topic + " Payload: " + messagePayload);
 
                         MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
-                        mqttMessage.setQos(0);
+                        MqttMessage.validateQos(qos);
+                        mqttMessage.setQos(qos);
 
                         mqttClient.publish(topic, mqttMessage);
 

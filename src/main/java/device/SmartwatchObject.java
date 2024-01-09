@@ -5,7 +5,7 @@ import resource.GenericResource;
 
 import java.util.Map;
 
-public class SmartWatchObject implements GenericSmartObject{
+public class SmartwatchObject implements GenericSmartObject{
     @Override
     public void init(String smartObjectId, IMqttClient mqttClient, Map<String, GenericResource<?>> resourceMap) {
 

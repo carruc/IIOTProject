@@ -11,10 +11,11 @@ public class PersonDataMessage extends GenericMessage{
     private String wristbandId;
 
     public PersonDataMessage(){
-
+        super();
     }
 
     public PersonDataMessage(String CF, String name, String lastname, int age, int roomNumber, String wristbandId) {
+        super();
         this.CF = CF;
         this.name = name;
         this.lastname = lastname;

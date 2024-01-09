@@ -8,9 +8,10 @@ public class HealthcareDataMessage extends GenericMessage{
     private Double bodyTemperature;
 
     public HealthcareDataMessage(){
-
+        super();
     }
     public HealthcareDataMessage(Double BPM, Double oxygen, Double bodyTemperature) {
+        super();
         this.BPM = BPM;
         this.oxygen = oxygen;
         this.bodyTemperature = bodyTemperature;

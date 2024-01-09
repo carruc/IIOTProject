@@ -7,7 +7,12 @@ public class IrregularHealthcareDataMessage extends GenericMessage{
     private PersonDataDescriptor person;
     private HealthcareDataDescriptor healthcareData;
 
+    public IrregularHealthcareDataMessage(){
+        super();
+    }
+
     public IrregularHealthcareDataMessage(PersonDataDescriptor person, HealthcareDataDescriptor healthcareData) {
+        super();
         this.person = person;
         this.healthcareData = healthcareData;
     }

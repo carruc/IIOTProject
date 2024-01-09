@@ -7,10 +7,11 @@ public class GPSLocationMessage extends GenericMessage{
     private PointXYZ gpsLocation;
 
     public GPSLocationMessage(){
-
+        super();
     }
 
     public GPSLocationMessage(PointXYZ gpsLocation){
+        super();
         this.gpsLocation = gpsLocation;
     }
 

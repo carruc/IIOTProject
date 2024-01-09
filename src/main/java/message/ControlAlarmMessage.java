@@ -6,10 +6,11 @@ public class ControlAlarmMessage extends GenericMessage{
     private Boolean alarmValue;
 
     public ControlAlarmMessage(){
-
+        super();
     }
 
     public ControlAlarmMessage(Boolean alarmValue) {
+        super();
         this.alarmValue = alarmValue;
     }
 

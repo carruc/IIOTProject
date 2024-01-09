@@ -21,13 +21,14 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
     private GPSLocationDescriptor gpsLocationDescriptor;
 
     private List<WayPoint> wayPointList = null;
-
+    private List<WayPoint> reversedWayPointList = null;
     private ListIterator<WayPoint> wayPointListIterator;
+    private boolean reversed;
 
     private Timer timer;
 
     private static final long GPS_LOCATION_UPDATE_STARTING_DELAY = 5000;
-    private static final long GPS_LOCATION_UPDATE_PERIOD = 2000;
+    private static final long GPS_LOCATION_UPDATE_PERIOD = 300;
 
     public GPSSensorResource() {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
@@ -42,8 +43,12 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
     private void init(){
         try {
             gpsLocationDescriptor = new GPSLocationDescriptor();
-            this.wayPointList = GPX.read(GPX_FILE_NAME).getWayPoints();
-            this.wayPointListIterator = this.wayPointList.listIterator();
+            wayPointList = GPX.read(GPX_FILE_NAME).getWayPoints();
+            reversedWayPointList = new ArrayList<>(wayPointList);
+            Collections.reverse(reversedWayPointList);
+            wayPointListIterator = wayPointList.listIterator();
+            reversed = false;
+
             timer = new Timer();
             startPeriodicTask();
         } catch(Exception e){
@@ -68,11 +73,15 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
                         notifyUpdate(gpsLocationDescriptor);
 
                     }
-                    //At the end of the WayPoint List
                     else{
-                        Collections.reverse(wayPointList);
-                        wayPointListIterator = wayPointList.listIterator();
-                        logger.info("Iterating backward on the GPS Waypoint List ...");
+                        if(!reversed){
+                            wayPointListIterator = reversedWayPointList.listIterator();
+                            reversed = true;
+                        }
+                        else{
+                            wayPointListIterator = wayPointList.listIterator();
+                            reversed = false;
+                        }
                     }
                 }
             }, GPS_LOCATION_UPDATE_STARTING_DELAY, GPS_LOCATION_UPDATE_PERIOD);
@@ -84,7 +93,6 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
     public GPSLocationDescriptor getGpsLocationDescriptor() {
         return gpsLocationDescriptor;
     }
-
     public static void main(String[] args) {
         GPSSensorResource gpsSensorResource = new GPSSensorResource();
         gpsSensorResource.addDataListener(new ResourceDataListener<GPSLocationDescriptor>() {
@@ -95,7 +103,6 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
                     System.out.println("Device " + resource.getId() + " Value: " + updatedValue);
                 } else {
                     logger.error("Error");
-                    //System.out.println("Error");
                 }
             }
         });
