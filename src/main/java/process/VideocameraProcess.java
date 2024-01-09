@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
-public class VideoCameraProcess {
-    private static final Logger logger = LoggerFactory.getLogger(VideoCameraProcess.class);
+public class VideocameraProcess {
+    private static final Logger logger = LoggerFactory.getLogger(VideocameraProcess.class);
 
 
     public static void main(String[] args) {

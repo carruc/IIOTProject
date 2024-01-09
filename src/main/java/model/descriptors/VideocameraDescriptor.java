@@ -1,7 +1,7 @@
 package model.descriptors;
 
 
-public class VideoCameraDescriptor {
+public class VideocameraDescriptor {
     private String id;
     private int numberOfPeople;
 

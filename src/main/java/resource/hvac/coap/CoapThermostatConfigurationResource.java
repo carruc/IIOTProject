@@ -103,4 +103,6 @@ public class CoapThermostatConfigurationResource extends CoapResource {
             exchange.respond(CoAP.ResponseCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //TODO handlePUT()
 }
