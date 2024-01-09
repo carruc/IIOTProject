@@ -1,6 +1,7 @@
 package resource;
 
 import model.descriptors.VideocameraDescriptor;
+import model.descriptors.wristband.HealthcareDataDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,23 @@ public class VideocameraResource extends GenericResource<VideocameraDescriptor> 
 
     public VideocameraDescriptor getVideoCameraData() {
         return videoCameraData;
+    }
+
+    public static void main(String[] args) {
+        VideocameraResource videocameraResource = new VideocameraResource();
+
+        videocameraResource.addDataListener(new ResourceDataListener<VideocameraDescriptor>() {
+            @Override
+            public void onDataChanged(GenericResource<VideocameraDescriptor> resource, VideocameraDescriptor updatedValue) {
+                if (resource != null && updatedValue != null) {
+                    logger.info("Device: {} -> New videocamera value: {}", resource.getId(), updatedValue);
+                    System.out.println("Device " + resource.getId() + "Value: " + updatedValue);
+                } else {
+                    logger.error("Error");
+                    //System.out.println("Error");
+                }
+            }
+        });
     }
 }
 

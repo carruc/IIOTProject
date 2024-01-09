@@ -17,6 +17,8 @@ import static process.ProcessConfiguration.QOS_2;
 public class DataCollectorManager {
     private final static Logger logger = LoggerFactory.getLogger(DataCollectorManager.class);
 
+    private static final String VIDEOCAMERA_TOPIC = "videocamera/+";
+
     private static final String BASE_WRISTBAND_TOPIC = "wristbands";
     private static final String WRISTBAND_TELEMETRY_TOPIC = "wristbands/+/telemetry/+";
     private static final String WRISTBAND_INFO_TOPIC = "wristbands/+/info/+";
@@ -25,6 +27,7 @@ public class DataCollectorManager {
     private static final String GPS_TOPIC = "gps";
     private static final String CONTROL_TOPIC = "control";
     private static final String ALARM_TOPIC = "alarm";
+
 
     private static final Double MAX_TOLERABLE_BPM_VALUE = 100.0;
     private static final Double MAX_TOLERABLE_BODY_TEMPERATURE_VALUE = 38.0;
@@ -135,6 +138,18 @@ public class DataCollectorManager {
                     e.printStackTrace();
                 }
             });
+            mqttClient.subscribe(VIDEOCAMERA_TOPIC, new IMqttMessageListener() {
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    try{
+                        byte[] payload = message.getPayload();
+                        System.out.println("Topic: " + topic + " Payload: " + new String(payload));
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         } catch (Exception e) {
             logger.error("ERROR");
             e.printStackTrace();
