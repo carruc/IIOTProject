@@ -1,6 +1,6 @@
 package resource;
 
-import model.descriptors.VideoCameraDescriptor;
+import model.descriptors.VideocameraDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,30 +9,30 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-public class VideoCameraResource extends GenericResource<VideoCameraDescriptor> {
-    private static final Logger logger = LoggerFactory.getLogger(VideoCameraResource.class);
+public class VideocameraResource extends GenericResource<VideocameraDescriptor> {
+    private static final Logger logger = LoggerFactory.getLogger(VideocameraResource.class);
 
     public static final String RESOURCE_TYPE = "iot:sensor:video_camera";
 
-    private VideoCameraDescriptor videoCameraData;
+    private VideocameraDescriptor videoCameraData;
     private Timer timer;
     private Random random;
 
     private static final long CAMERA_DATA_UPDATE_STARTING_DELAY = 5000;
     private static final long CAMERA_DATA_UPDATE_PERIOD = 5000;
 
-    public VideoCameraResource() {
+    public VideocameraResource() {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
         init();
     }
 
-    public VideoCameraResource(String id, String type) {
+    public VideocameraResource(String id, String type) {
         super(id, type);
         init();
     }
 
     private void init() {
-        videoCameraData = new VideoCameraDescriptor();
+        videoCameraData = new VideocameraDescriptor();
         timer = new Timer();
         random = new Random();
         startPeriodicTask();
@@ -52,7 +52,7 @@ public class VideoCameraResource extends GenericResource<VideoCameraDescriptor> 
         }
     }
 
-    public VideoCameraDescriptor getVideoCameraData() {
+    public VideocameraDescriptor getVideoCameraData() {
         return videoCameraData;
     }
 }

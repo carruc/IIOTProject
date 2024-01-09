@@ -6,14 +6,12 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.descriptors.VideoCameraDescriptor;
+import model.descriptors.VideocameraDescriptor;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import resource.GenericResource;
-import resource.VideoCameraResource;
+import resource.VideocameraResource;
 
 import java.util.Map;
 
@@ -76,9 +74,9 @@ public class VideoCameraSmartObject implements GenericSmartObject {
 
                     logger.info("Registering to Resource {} (id: {}) notifications ...", cameraResource.getType(), cameraResource.getId());
 
-                    if (cameraResource.getType().equals(VideoCameraResource.RESOURCE_TYPE)) {
+                    if (cameraResource.getType().equals(VideocameraResource.RESOURCE_TYPE)) {
                         try {
-                            VideoCameraResource videoCameraResource = (VideoCameraResource) cameraResource;
+                            VideocameraResource videoCameraResource = (VideocameraResource) cameraResource;
 
                             String cameraInfoTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, cameraId, INFO_TOPIC, resourceEntry.getKey());
                             publishInfoCameraData(cameraInfoTopic, videoCameraResource.getVideoCameraData());
@@ -95,7 +93,7 @@ public class VideoCameraSmartObject implements GenericSmartObject {
         }
     }
 
-    private void publishInfoCameraData(String topic, VideoCameraDescriptor videoCameraDescriptor) throws MqttException, JsonProcessingException {
+    private void publishInfoCameraData(String topic, VideocameraDescriptor videoCameraDescriptor) throws MqttException, JsonProcessingException {
         if (this.mqttClient != null && this.mqttClient.isConnected() && topic != null && videoCameraDescriptor != null) {
             String messagePayload = mapper.writeValueAsString(videoCameraDescriptor);
 
