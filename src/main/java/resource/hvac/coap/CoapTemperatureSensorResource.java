@@ -2,6 +2,7 @@ package resource.hvac.coap;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import model.descriptors.hvac.TemperatureSensorDescriptor;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
@@ -24,8 +25,9 @@ public class CoapTemperatureSensorResource extends CoapResource {
 
     private Gson gson;
 
-    private Double updatedTemperatureValue = 0.0;
+    //private Double updatedTemperatureValue = 0.0;
 
+    public TemperatureSensorDescriptor updatedTemperatureValue;
     private String deviceId;
 
     public CoapTemperatureSensorResource(String deviceId, String name, TemperatureSensorResource temperatureSensor) {
@@ -53,9 +55,11 @@ public class CoapTemperatureSensorResource extends CoapResource {
             logger.error("Error -> NULL Raw Reference !");
         }
 
-        this.temperatureSensor.addDataListener(new ResourceDataListener<Double>() {
+
+
+        this.temperatureSensor.addDataListener(new ResourceDataListener<TemperatureSensorDescriptor>() {
             @Override
-            public void onDataChanged(GenericResource<Double> resource, Double updatedValue) {
+            public void onDataChanged(GenericResource<TemperatureSensorDescriptor> resource, TemperatureSensorDescriptor updatedValue) {
                 updatedTemperatureValue = updatedValue;
                 changed();
             }
@@ -69,7 +73,7 @@ public class CoapTemperatureSensorResource extends CoapResource {
             json.addProperty("deviceId", deviceId);
             json.addProperty("name", getName());
             json.addProperty("unit", "C");
-            json.addProperty("value", updatedTemperatureValue);
+            json.addProperty("value", updatedTemperatureValue.getTemperature());
             json.addProperty("timestamp", System.currentTimeMillis());
 
             return gson.toJson(json);

@@ -104,5 +104,4 @@ public class CoapThermostatConfigurationResource extends CoapResource {
         }
     }
 
-    //TODO handlePUT()
 }

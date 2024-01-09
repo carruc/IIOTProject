@@ -1,5 +1,6 @@
 package process;
 
+import model.descriptors.hvac.TemperatureSensorDescriptor;
 import model.descriptors.hvac.ThermostatConfigurationDescriptor;
 import org.eclipse.californium.core.CoapServer;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 public class ThermostatProcess extends CoapServer {
     private final static Logger logger = LoggerFactory.getLogger(ThermostatProcess.class);
+    TemperatureSensorDescriptor updatedTemperatureValue;
 
     public ThermostatProcess(int port) {
         super(port);
@@ -46,13 +48,12 @@ public class ThermostatProcess extends CoapServer {
         this.add(configurationResource);
 
         //notifica quando temp interna cambia
-        temperatureSensor.addDataListener(new ResourceDataListener<Double>() {
+        temperatureSensor.addDataListener(new ResourceDataListener<TemperatureSensorDescriptor>() {
             @Override
-            public void onDataChanged(GenericResource<Double> resource, Double updatedValue) {
+            public void onDataChanged(GenericResource<TemperatureSensorDescriptor> resource, TemperatureSensorDescriptor updatedValue) {
 
                 logger.info("[THERMOSTAT-BEHAVIOUR] -> Updated Temperature Value: {}", updatedValue);
 
-                //TODO Update Check Method
                 if(switchActuator.getActive() && isHvacCommunicationRequired(configurationParameter.loadUpdatedValue(), updatedValue))
                     logger.info("[THERMOSTAT-BEHAVIOUR] -> Sending PUT Request to HVAC Unit: {}", configurationParameter.loadUpdatedValue().getHvacUnitResourceUri());
             }
@@ -60,7 +61,7 @@ public class ThermostatProcess extends CoapServer {
 
     }
 
-    private static boolean isHvacCommunicationRequired(ThermostatConfigurationDescriptor thermostatConfigurationModel, double currentTemperatureValue){
+    private static boolean isHvacCommunicationRequired(ThermostatConfigurationDescriptor thermostatConfigurationModel, TemperatureSensorDescriptor currentTemperatureValue){
         return true;
     }
 

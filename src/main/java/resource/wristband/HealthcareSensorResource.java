@@ -42,9 +42,10 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
     private void init() {
         healthcareData = new HealthcareDataDescriptor(new BPMDescriptor(), new OxygenDescriptor(), new BodyTemperatureDescriptor());
         timer = new Timer();
-        random = new Random();
+        random = new Random(System.currentTimeMillis());
         startPeriodicTask();
     }
+
 
     private void startPeriodicTask() {
         try {
@@ -61,6 +62,7 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
             e.printStackTrace();
         }
     }
+
 
     public HealthcareDataDescriptor getHealthcareData() {
         return healthcareData;

@@ -10,7 +10,7 @@ public class ThermostatConfigurationDescriptor {
     private double minTemperature = 10.0;
 
     //Example of the target HVAC internal unit associated to the thermostat room
-    private String hvacUnitResourceUri = "coap://127.0.0.1:5683/living-room/switch";
+    private String hvacUnitResourceUri = "coap://127.0.0.1:5683/room/switch";
 
     private String operationalMode = HEATING_OPERATIONAL_MODE;
 
