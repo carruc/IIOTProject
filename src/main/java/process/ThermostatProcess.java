@@ -16,7 +16,7 @@ import resource.hvac.coap.CoapThermostatConfigurationResource;
 
 import java.util.UUID;
 
-/**CoAP Server for Heating Ventilation Air Conditioning (HVAC) System **/
+/**CoAP Server for Thermostat **/
 
 public class ThermostatProcess extends CoapServer {
     private final static Logger logger = LoggerFactory.getLogger(ThermostatProcess.class);

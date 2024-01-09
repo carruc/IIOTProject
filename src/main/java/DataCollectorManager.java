@@ -17,7 +17,7 @@ import static process.ProcessConfiguration.QOS_2;
 public class DataCollectorManager {
     private final static Logger logger = LoggerFactory.getLogger(DataCollectorManager.class);
 
-    private static final String VIDEOCAMERA_TOPIC = "videocamera/+";
+    private static final String VIDEOCAMERA_INFO_TOPIC = "videocamera/+/info/+";
 
     private static final String BASE_WRISTBAND_TOPIC = "wristbands";
     private static final String WRISTBAND_TELEMETRY_TOPIC = "wristbands/+/telemetry/+";
@@ -138,7 +138,7 @@ public class DataCollectorManager {
                     e.printStackTrace();
                 }
             });
-            mqttClient.subscribe(VIDEOCAMERA_TOPIC, new IMqttMessageListener() {
+            mqttClient.subscribe(VIDEOCAMERA_INFO_TOPIC, new IMqttMessageListener() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     try{

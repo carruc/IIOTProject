@@ -1,5 +1,6 @@
 package device;
 
+import message.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,20 +12,23 @@ import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import resource.GenericResource;
+import resource.VideocameraInfoResource;
 import resource.VideocameraResource;
 
 import java.util.Map;
+
+import static process.ProcessConfiguration.QOS_0;
 
 
 public class VideoCameraSmartObject implements GenericSmartObject {
 
     private static final Logger logger = LoggerFactory.getLogger(VideoCameraSmartObject.class);
 
-    private static final String BASIC_TOPIC = "camera";
-
-    private static final String TELEMETRY_TOPIC = "telemetry";
+    private static final String BASIC_TOPIC = "videocamera";
 
     private static final String INFO_TOPIC = "info";
+
+    private static final String TELEMETRY_TOPIC = "telemetry";
 
     private String cameraId;
 
@@ -44,8 +48,10 @@ public class VideoCameraSmartObject implements GenericSmartObject {
         this.mqttClient = mqttClient;
         this.resourceMap = resourceMap;
 
-        logger.info("Video Camera Smart Object correctly created! Resource Number: {}", resourceMap.keySet().size());
+        logger.info("Video Camera Smart Object correctly created! Number of hosted resources: {}", resourceMap.keySet().size());
     }
+
+    /** Videocamera behaviour **/
 
     public void start() {
         try {
@@ -74,16 +80,32 @@ public class VideoCameraSmartObject implements GenericSmartObject {
 
                     logger.info("Registering to Resource {} (id: {}) notifications ...", cameraResource.getType(), cameraResource.getId());
 
+                    /**data topic**/
+
                     if (cameraResource.getType().equals(VideocameraResource.RESOURCE_TYPE)) {
                         try {
                             VideocameraResource videoCameraResource = (VideocameraResource) cameraResource;
 
-                            String cameraInfoTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, cameraId, INFO_TOPIC, resourceEntry.getKey());
-                            publishInfoCameraData(cameraInfoTopic, videoCameraResource.getVideoCameraData());
+                            String cameraDataTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, cameraId, TELEMETRY_TOPIC, resourceEntry.getKey());
+                            publishJsonFormattedMessage(cameraDataTopic,
+                                    new VideocameraDataMessage(videoCameraResource.getVideoCameraData()),
+                                    false, QOS_0);
                         } catch (Exception e) {
                             logger.error("ERROR");
                         }
+                    }
 
+                    /**info topic**/
+                    if (cameraResource.getType().equals(VideocameraInfoResource.RESOURCE_TYPE)) {
+                        try {
+                            VideocameraInfoResource videocameraInfoResource = (VideocameraInfoResource) cameraResource;
+
+                            String cameraInfoTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, cameraId, INFO_TOPIC, resourceEntry.getKey());
+                            publishJsonFormattedMessage(cameraInfoTopic,
+                                    new VideocameraInfoMessage(videocameraInfoResource.getVideocameraInfoDescriptor()), true, QOS_0);
+                        } catch (Exception e) {
+                            logger.error("ERROR");
+                        }
                     }
 
                 }
@@ -93,6 +115,7 @@ public class VideoCameraSmartObject implements GenericSmartObject {
         }
     }
 
+    /**
     private void publishInfoCameraData(String topic, VideocameraDescriptor videoCameraDescriptor) throws MqttException, JsonProcessingException {
         if (this.mqttClient != null && this.mqttClient.isConnected() && topic != null && videoCameraDescriptor != null) {
             String messagePayload = mapper.writeValueAsString(videoCameraDescriptor);
@@ -111,5 +134,26 @@ public class VideoCameraSmartObject implements GenericSmartObject {
         } else
             logger.error("Error: Topic or Msg = Null or MQTT Client is not Connected !");
     }
+     **/
+
+
+    private void publishJsonFormattedMessage(String topic, GenericMessage payload, boolean retained, int qos) throws MqttException, JsonProcessingException {
+        if (this.mqttClient != null && this.mqttClient.isConnected() && topic != null && payload != null) {
+            String messagePayload = mapper.writeValueAsString(payload);
+
+            logger.info("Sending to topic: {} -> Data: {}", topic, messagePayload);
+            MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
+            MqttMessage.validateQos(qos);
+            mqttMessage.setQos(qos);
+            if (retained)
+                mqttMessage.setRetained(true);
+            mqttClient.publish(topic, mqttMessage);
+
+            logger.info("Data correctly published to topic: {}", topic);
+        } else
+            logger.error("Error: topic or message = Null or MQTT Client is not connected!");
+    }
 }
+
+
 

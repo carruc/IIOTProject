@@ -1,14 +1,16 @@
-package model.descriptors;
+package message;
 
+import model.descriptors.VideocameraDescriptor;
 
-public class VideocameraDescriptor {
+public class VideocameraDataMessage extends GenericMessage{
     private int numberOfPeople;
 
-    public VideocameraDescriptor(int numberOfPeople) {
+    public VideocameraDataMessage(int numberOfPeople) {
         this.numberOfPeople = numberOfPeople;
     }
 
-    public VideocameraDescriptor() {
+    public VideocameraDataMessage(VideocameraDescriptor videocameraDescriptor) {
+        this(videocameraDescriptor.getNumberOfPeople());
     }
 
     public int getNumberOfPeople() {
@@ -21,9 +23,8 @@ public class VideocameraDescriptor {
 
     @Override
     public String toString() {
-        return "VideocameraDescriptor{" +
+        return "VideocameraDataMessage{" +
                 "numberOfPeople=" + numberOfPeople +
                 '}';
     }
 }
-

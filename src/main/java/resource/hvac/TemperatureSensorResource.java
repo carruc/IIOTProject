@@ -23,16 +23,11 @@ public class TemperatureSensorResource extends GenericResource<TemperatureSensor
 
     private static final double MAX_TEMPERATURE_VARIATION = 1.0;
 
-    private static final String LOG_DISPLAY_NAME = "TemperatureSensor";
-
-    //Ms associated to data update
     public static final long UPDATE_PERIOD = 5000;
 
     private static final long TASK_DELAY_TIME = 5000;
 
     private static final String RESOURCE_TYPE = "iot.sensor.temperature";
-
-    //private Double updatedValue;
 
     TemperatureSensorDescriptor temperatureSensor;
 
@@ -45,47 +40,12 @@ public class TemperatureSensorResource extends GenericResource<TemperatureSensor
         init();
     }
 
-    /**private void init(){
-
-     try{
-     timer = new Timer();
-     random = new Random(System.currentTimeMillis());
-     this.updatedValue = MIN_TEMPERATURE_VALUE + this.random.nextDouble()*(MAX_TEMPERATURE_VALUE - MIN_TEMPERATURE_VALUE);
-     startPeriodicTask();
-
-     }catch (Exception e){
-     logger.error("Error initializing the IoT Resource ! Msg: {}", e.getLocalizedMessage());
-     }
-
-     }
-     **/
-
     private void init(){
         temperatureSensor = new TemperatureSensorDescriptor();
         timer = new Timer();
         random = new Random(System.currentTimeMillis());
         startPeriodicTask();
     }
-
-    /**
-     private void startPeriodicTask(){
-     try{
-     //logger.info("Starting periodic Update Task with Period: {} ms", UPDATE_PERIOD);
-     timer.schedule(new TimerTask() {
-    @Override
-    public void run() {
-    double variation = (MIN_TEMPERATURE_VARIATION + MAX_TEMPERATURE_VARIATION*random.nextDouble()) * (random.nextDouble() > 0.5 ? 1.0 : -1.0);
-    updatedValue = updatedValue + variation;
-    notifyUpdate(updatedValue);
-    }
-    }, TASK_DELAY_TIME, UPDATE_PERIOD);
-
-     }catch (Exception e){
-     logger.error("Error executing periodic resource value ! Msg: {}", e.getLocalizedMessage());
-     }
-
-     }
-     **/
 
     private void startPeriodicTask(){
         try{
@@ -103,11 +63,6 @@ public class TemperatureSensorResource extends GenericResource<TemperatureSensor
         }
     }
 
-    /**
-     public Double loadUpdatedValue() {
-     return this.updatedValue;
-     }
-     **/
 
     public static void main(String[] args) {
 

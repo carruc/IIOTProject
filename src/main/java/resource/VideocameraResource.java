@@ -13,7 +13,7 @@ import java.util.UUID;
 public class VideocameraResource extends GenericResource<VideocameraDescriptor> {
     private static final Logger logger = LoggerFactory.getLogger(VideocameraResource.class);
 
-    public static final String RESOURCE_TYPE = "iot:sensor:video_camera";
+    public static final String RESOURCE_TYPE = "iot:sensor:videocamera";
 
     private VideocameraDescriptor videoCameraData;
     private Timer timer;
