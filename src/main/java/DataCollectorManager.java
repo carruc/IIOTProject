@@ -18,6 +18,8 @@ public class DataCollectorManager {
     private final static Logger logger = LoggerFactory.getLogger(DataCollectorManager.class);
 
     private static final String VIDEOCAMERA_INFO_TOPIC = "videocamera/+/info/+";
+    private static final String VIDEOCAMERA_TELEMETRY_TOPIC = "videocamera/+/telemetry/+";
+
 
     private static final String BASE_WRISTBAND_TOPIC = "wristbands";
     private static final String WRISTBAND_TELEMETRY_TOPIC = "wristbands/+/telemetry/+";
@@ -139,6 +141,17 @@ public class DataCollectorManager {
                 }
             });
             mqttClient.subscribe(VIDEOCAMERA_INFO_TOPIC, new IMqttMessageListener() {
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    try{
+                        byte[] payload = message.getPayload();
+                        System.out.println("Topic: " + topic + " Payload: " + new String(payload));
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+            mqttClient.subscribe(VIDEOCAMERA_TELEMETRY_TOPIC, new IMqttMessageListener() {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     try{
