@@ -12,7 +12,7 @@ public class ThermostatConfigurationParameterResource extends GenericResource<Th
 
     private ThermostatConfigurationDescriptor thermostatConfigurationDescriptor;
 
-    private static final String RESOURCE_TYPE = "iot.config.thermostat";
+    private static final String RESOURCE_TYPE = "iot.configuration.thermostat";
 
     public ThermostatConfigurationParameterResource(ThermostatConfigurationDescriptor thermostatConfigurationDescriptor) {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);
