@@ -68,7 +68,6 @@ public class VideocameraResource extends GenericResource<VideocameraDescriptor> 
                     System.out.println("Device " + resource.getId() + "Value: " + updatedValue);
                 } else {
                     logger.error("Error");
-                    //System.out.println("Error");
                 }
             }
         });
