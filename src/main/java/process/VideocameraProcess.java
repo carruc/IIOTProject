@@ -17,7 +17,7 @@ public class VideocameraProcess {
 
     public static void main(String[] args) {
         try {
-            String cameraId = "camera1"; // Valore fisso per l'identificatore della telecamera
+            String cameraId = "camera1";
             MqttClientPersistence persistence = new MemoryPersistence();
             IMqttClient mqttClient = new MqttClient(String.format("tcp://%s:%d", ProcessConfiguration.MQTT_BROKER_IP,
                     ProcessConfiguration.MQTT_BROKER_PORT), cameraId, persistence);

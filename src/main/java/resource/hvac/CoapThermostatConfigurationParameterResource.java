@@ -3,6 +3,8 @@ package resource.hvac;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
@@ -28,6 +30,8 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
     private ThermostatConfigurationParameterResource thermostatConfigurationParameterResource;
 
     private ThermostatConfigurationDescriptor configurationModelValue;
+
+    private Gson gson;
 
     private ObjectMapper objectMapper;
 
@@ -58,6 +62,7 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
             logger.error("Error -> NULL Raw Reference !");
         }
 
+        /**
         this.thermostatConfigurationParameterResource.addDataListener(new ResourceDataListener<ThermostatConfigurationDescriptor>() {
             @Override
             public void onDataChanged(GenericResource<ThermostatConfigurationDescriptor> resource, ThermostatConfigurationDescriptor updatedValue) {
@@ -65,6 +70,7 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
                 changed();
             }
         });
+         **/
     }
 
     private Optional<String> getJsonResponse() {
@@ -107,5 +113,39 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
             exchange.respond(CoAP.ResponseCode.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public void handlePUT(CoapExchange exchange) {
+        try {
+            if (exchange.getRequestPayload() != null) {
+
+                String jsonPayload = new String(exchange.getRequestPayload());
+                JsonObject jsonObject = gson.fromJson(jsonPayload, JsonObject.class);
+
+                updateConfigurationValues(jsonObject);
+
+                logger.info("Configuration values updated: {}", configurationModelValue);
+                exchange.respond(CoAP.ResponseCode.CHANGED);
+            } else {
+                exchange.respond(CoAP.ResponseCode.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            logger.error("Error handling PUT -> {}", e.getLocalizedMessage());
+            exchange.respond(CoAP.ResponseCode.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void updateConfigurationValues(JsonObject jsonObject) {
+        if (jsonObject.has("min_temperature")) {
+            double minTemperature = jsonObject.get("min_temperature").getAsDouble();
+            configurationModelValue.setMinTemperature(minTemperature);
+        }
+
+        if (jsonObject.has("max_temperature")) {
+            double maxTemperature = jsonObject.get("max_temperature").getAsDouble();
+            configurationModelValue.setMaxTemperature(maxTemperature);
+        }
+    }
+
 }
 

@@ -1,8 +1,13 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
 import message.*;
 import model.descriptors.wristband.*;
 import model.point.PointXYZ;
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
+import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.PointXYZUtils;
@@ -10,6 +15,7 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import process.ProcessConfiguration;
 
+import java.io.IOException;
 import java.util.*;
 
 import static process.ProcessConfiguration.QOS_2;
@@ -47,6 +53,38 @@ public class DataCollectorManager {
 
     public static void main(String[] args) {
         runMQTTSubscribers();
+    }
+
+    private static void performGetRequest(String uri) throws ConnectorException, IOException {
+        CoapClient coapClient = new CoapClient(uri);
+
+        CoapResponse response = coapClient.get();
+        if (response.isSuccess()) {
+            System.out.println("GET Request Successful");
+            System.out.println("Response Code: " + response.getCode());
+            System.out.println("Payload: " + response.getResponseText());
+        } else {
+            System.out.println("GET Request Failed");
+            System.out.println("Response Code: " + response.getCode());
+        }
+
+        coapClient.shutdown();
+    }
+
+    private static void performPutRequest(String uri, JsonObject jsonPayload) throws ConnectorException, IOException {
+        CoapClient coapClient = new CoapClient(uri);
+
+        CoapResponse response = coapClient.put(jsonPayload.toString(),  MediaTypeRegistry.APPLICATION_JSON);
+
+        if (response.isSuccess()) {
+            System.out.println("PUT Request Successful");
+            System.out.println("Response Code: " + response.getCode());
+        } else {
+            System.out.println("PUT Request Failed");
+            System.out.println("Response Code: " + response.getCode());
+        }
+
+        coapClient.shutdown();
     }
 
     public static void runMQTTSubscribers(){
