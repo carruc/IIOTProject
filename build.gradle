@@ -21,7 +21,7 @@ dependencies {
 
     implementation group: 'io.jenetics', name: 'jpx', version: '2.0.0'
 
-    implementation group: 'org.eclipse.californium', name: 'californium-core', version: '1.0.0-M3'
+    implementation group: 'org.eclipse.californium', name: 'californium-core', version: '2.4.1'
     implementation group: 'com.google.code.gson', name: 'gson', version: '2.9.1'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
