@@ -46,6 +46,10 @@ public class DataCollectorManager {
     private static ObjectMapper mapper = new ObjectMapper();
 
     public static void main(String[] args) {
+        runMQTTSubscribers();
+    }
+
+    public static void runMQTTSubscribers(){
         try {
             String clientId = UUID.randomUUID().toString();
 
@@ -106,8 +110,8 @@ public class DataCollectorManager {
 
 
                             if (personFlagMap.get(personWristbandId).getHealthcareFlag() == false && (healthcareDataDescriptor.getBPM() < MIN_TOLERABLE_BPM_VALUE || healthcareDataDescriptor.getBPM() > MAX_TOLERABLE_BPM_VALUE
-                                || healthcareDataDescriptor.getOxygen() < MIN_TOLERABLE_OXYGEN_VALUE
-                                || healthcareDataDescriptor.getBodyTemperature() < MIN_TOLERABLE_BODY_TEMPERATURE_VALUE || healthcareDataDescriptor.getBodyTemperature() > MAX_TOLERABLE_BODY_TEMPERATURE_VALUE)) {
+                                    || healthcareDataDescriptor.getOxygen() < MIN_TOLERABLE_OXYGEN_VALUE
+                                    || healthcareDataDescriptor.getBodyTemperature() < MIN_TOLERABLE_BODY_TEMPERATURE_VALUE || healthcareDataDescriptor.getBodyTemperature() > MAX_TOLERABLE_BODY_TEMPERATURE_VALUE)) {
                                 publishJsonFormattedMessage(mqttClient, IRREGULAR_HEALTHCARE_DATA_TOPIC,
                                         new IrregularHealthcareDataMessage(personHealthcareDataMap.get(personWristbandId).getPerson(), healthcareDataDescriptor), false, QOS_2);
                                 personFlagMap.get(personWristbandId).setHealthcareFlag(true);
@@ -121,7 +125,7 @@ public class DataCollectorManager {
                         if(receivedGPSLocation.isPresent()) {
                             GPSLocationDescriptor gpsLocationDescriptor = receivedGPSLocation.get();
                             System.out.println(PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
-                             NURSING_HOUSE_LOCATION.getGPSLocation()));
+                                    NURSING_HOUSE_LOCATION.getGPSLocation()));
                             String personWristbandId = topic.replace("wristbands/", "").replace("/telemetry/gps", "");
                             if(personFlagMap.get(personWristbandId).getAlarmFlag() == false && PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
                                     NURSING_HOUSE_LOCATION.getGPSLocation()) >= MAX_TOLERABLE_WRISTBAND_DISTANCE_METER){

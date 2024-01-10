@@ -1,7 +1,10 @@
 package process.hvac;
 
 import model.descriptors.ThermostatConfigurationDescriptor;
+import org.eclipse.californium.core.CoapClient;
+import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.CoapServer;
+import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import resource.GenericResource;
@@ -42,7 +45,7 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
         this.add(switchResource);
         this.add(configurationResource);
 
-        //Verifica sulla temperatura interna
+        /**Verifica sulla temperatura**/
         temperatureSensorResource.addDataListener(new ResourceDataListener<Double>() {
             @Override
             public void onDataChanged(GenericResource<Double> resource, Double updatedValue) {
@@ -51,7 +54,6 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
 
                 if (switchActuatorResource.getActive() && isHvacCommunicationRequired(configurationRawParameter.loadUpdatedValue(), updatedValue)) {
                     logger.info("[THERMOSTAT-BEHAVIOUR] -> Sending PUT Request to HVAC Unit: {}", configurationRawParameter.loadUpdatedValue().getHvacUnitResourceUri());
-
 
                     ThermostatConfigurationDescriptor currentConfiguration = configurationRawParameter.loadUpdatedValue();
                     double minTemperature = currentConfiguration.getMinTemperature();
@@ -64,12 +66,18 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
                     } else {
                         currentConfiguration.setOperationalMode(HvacMode.OFF);
                     }
+
+                    String switchResourceUri = switchResource.getURI();
+                    sendSwitchActuatorPutRequest(switchResourceUri, true);
+
                 }
             }
         });
 
     }
 
+    /**
+     * Metodo che effettua controllo sulla temperatura e indica se c'è necessità di modificare il valore o no*/
     private static boolean isHvacCommunicationRequired(ThermostatConfigurationDescriptor thermostatConfigurationDescriptor, double currentTemperatureValue) {
         double minTemperature = thermostatConfigurationDescriptor.getMinTemperature();
         double maxTemperature = thermostatConfigurationDescriptor.getMaxTemperature();
@@ -86,6 +94,21 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
         }
 
         return false;
+    }
+
+    private static void sendSwitchActuatorPutRequest(String switchResourceUri, boolean value) {
+        try {
+            CoapClient coapClient = new CoapClient(switchResourceUri);
+            CoapResponse response = coapClient.put(String.valueOf(value), MediaTypeRegistry.TEXT_PLAIN);
+
+            if (response.isSuccess()) {
+                logger.info("PUT Request to switch resource successful");
+            } else {
+                logger.error("PUT Request to switch resource failed. Response code: {}", response.getCode());
+            }
+        } catch (Exception e) {
+            logger.error("Error sending PUT request to switch resource: {}", e.getMessage());
+        }
     }
 
 
