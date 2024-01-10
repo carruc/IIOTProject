@@ -15,7 +15,7 @@ public class TemperatureSensorResource extends GenericResource<Double> {
 
     private static final Logger logger = LoggerFactory.getLogger(TemperatureSensorResource.class);
 
-    //boud per la generazione dei valori di temperatura
+    //bound per la generazione dei valori di temperatura
     private static final double MIN_TEMPERATURE_VALUE = 18.0;
 
     private static final double MAX_TEMPERATURE_VALUE = 30.0;
