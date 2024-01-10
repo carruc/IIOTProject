@@ -24,7 +24,7 @@ public class VideoCameraSmartObject implements GenericSmartObject {
 
     private static final Logger logger = LoggerFactory.getLogger(VideoCameraSmartObject.class);
 
-    private static final String BASIC_TOPIC = "videocamera";
+    private static final String BASIC_TOPIC = "videocameras";
 
     private static final String INFO_TOPIC = "info";
 
