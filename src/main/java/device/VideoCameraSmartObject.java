@@ -118,27 +118,6 @@ public class VideoCameraSmartObject implements GenericSmartObject {
         }
     }
 
-    /**
-    private void publishInfoCameraData(String topic, VideocameraDescriptor videoCameraDescriptor) throws MqttException, JsonProcessingException {
-        if (this.mqttClient != null && this.mqttClient.isConnected() && topic != null && videoCameraDescriptor != null) {
-            String messagePayload = mapper.writeValueAsString(videoCameraDescriptor);
-
-            logger.info("Sending to topic: {} -> Data: {}", topic, messagePayload);
-            System.out.println("Topic: " + topic + " Payload: " + messagePayload);
-
-            MqttMessage mqttMessage = new MqttMessage(messagePayload.getBytes());
-            mqttMessage.setQos(0);
-            mqttMessage.setRetained(true);
-
-            mqttClient.publish(topic, mqttMessage);
-
-            logger.info("Data Correctly Published to topic: {}", topic);
-
-        } else
-            logger.error("Error: Topic or Msg = Null or MQTT Client is not Connected !");
-    }
-     **/
-
 
     private void publishJsonFormattedMessage(String topic, GenericMessage payload, boolean retained, int qos) throws MqttException, JsonProcessingException {
         if (this.mqttClient != null && this.mqttClient.isConnected() && topic != null && payload != null) {

@@ -4,7 +4,11 @@ import model.descriptors.ThermostatConfigurationDescriptor;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.CoapServer;
+import org.eclipse.californium.core.Utils;
+import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
+import org.eclipse.californium.core.coap.Request;
+import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import resource.GenericResource;
@@ -12,12 +16,14 @@ import resource.ResourceDataListener;
 import resource.hvac.*;
 import utils.HvacMode;
 
+import java.io.IOException;
 import java.util.UUID;
 
 
 public class ThermostatCoapSmartObjectProcess extends CoapServer {
 
     private final static Logger logger = LoggerFactory.getLogger(ThermostatCoapSmartObjectProcess.class);
+    private static final String COAP_ENDPOINT = "coap://127.0.0.1:5684/switch";
 
     public ThermostatCoapSmartObjectProcess(int port) {
         super(port);
@@ -68,7 +74,7 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
                     }
 
                     String switchResourceUri = switchResource.getURI();
-                    sendSwitchActuatorPutRequest(switchResourceUri, true);
+                    sendSwitchActuatorPutRequest();
 
                 }
             }
@@ -96,18 +102,37 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
         return false;
     }
 
-    private static void sendSwitchActuatorPutRequest(String switchResourceUri, boolean value) {
-        try {
-            CoapClient coapClient = new CoapClient(switchResourceUri);
-            CoapResponse response = coapClient.put(String.valueOf(value), MediaTypeRegistry.TEXT_PLAIN);
+    private static void sendSwitchActuatorPutRequest() {
+        CoapClient coapClient = new CoapClient(COAP_ENDPOINT);
 
-            if (response.isSuccess()) {
-                logger.info("PUT Request to switch resource successful");
-            } else {
-                logger.error("PUT Request to switch resource failed. Response code: {}", response.getCode());
-            }
-        } catch (Exception e) {
-            logger.error("Error sending PUT request to switch resource: {}", e.getMessage());
+        Request request = new Request(CoAP.Code.PUT);
+
+        String myPayload = "true";
+        logger.info("PUT Request Random Payload: {}", myPayload);
+        request.setPayload(myPayload);
+
+        request.setConfirmable(true);
+
+        logger.info("Request Pretty Print: \n{}", Utils.prettyPrint(request));
+
+        //Synchronously send the POST request (blocking call)
+        CoapResponse coapResp = null;
+
+        try {
+
+            coapResp = coapClient.advanced(request);
+
+            //Pretty print for the received response
+            logger.info("Response Pretty Print: \n{}", Utils.prettyPrint(coapResp));
+
+            //The "CoapResponse" message contains the response.
+            String text = coapResp.getResponseText();
+            logger.info("Payload: {}", text);
+            logger.info("Message ID: " + coapResp.advanced().getMID());
+            logger.info("Token: " + coapResp.advanced().getTokenString());
+
+        } catch (ConnectorException | IOException e) {
+            e.printStackTrace();
         }
     }
 

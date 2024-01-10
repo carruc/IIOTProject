@@ -22,9 +22,9 @@ public class HvacCoapSmartObjectProcess extends CoapServer {
 
         SwitchActuatorResource RoomSwitchActuatorResource = new SwitchActuatorResource();
 
-        CoapSwitchActuatorResource livingSwitchResource = new CoapSwitchActuatorResource(deviceId, "switch", RoomSwitchActuatorResource);
+        CoapSwitchActuatorResource SwitchResource = new CoapSwitchActuatorResource(deviceId, "switch", RoomSwitchActuatorResource);
 
-        RoomRootResource.add(livingSwitchResource);
+        RoomRootResource.add(SwitchResource);
 
         this.add(RoomRootResource);
     }
