@@ -6,7 +6,6 @@ import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.CoapServer;
 import org.eclipse.californium.core.Utils;
 import org.eclipse.californium.core.coap.CoAP;
-import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
@@ -73,7 +72,6 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
                         currentConfiguration.setOperationalMode(HvacMode.OFF);
                     }
 
-                    String switchResourceUri = switchResource.getURI();
                     sendSwitchActuatorPutRequest();
 
                 }
