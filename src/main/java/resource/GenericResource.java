@@ -63,7 +63,7 @@ public abstract class GenericResource<T> {
     public void setType(String type) {
         this.type = type;
     }
-    //public abstract T loadUpdatedValue();
+    public abstract T loadUpdatedValue();
 
     @Override
     public String toString() {

@@ -1,13 +1,13 @@
 package process.hvac;
 
+import model.descriptors.ThermostatConfigurationDescriptor;
 import org.eclipse.californium.core.CoapServer;
-import org.server.GenericResource;
-import org.server.ResourceDataListener;
-import org.server.model.HvacMode;
-import org.server.model.ThermostatConfigurationDescriptor;
-import org.server.resource.hvac.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import resource.GenericResource;
+import resource.ResourceDataListener;
+import resource.hvac.*;
+import utils.HvacMode;
 
 import java.util.UUID;
 

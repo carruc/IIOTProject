@@ -40,6 +40,11 @@ public class GPSSensorResource extends GenericResource<GPSLocationDescriptor> {
         init();
     }
 
+    @Override
+    public GPSLocationDescriptor loadUpdatedValue() {
+        return null;
+    }
+
     private void init(){
         try {
             gpsLocationDescriptor = new GPSLocationDescriptor();

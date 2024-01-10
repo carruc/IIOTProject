@@ -2,8 +2,7 @@ package process.hvac;
 
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
-import org.server.resource.hvac.CoapSwitchActuatorResource;
-import org.server.resource.hvac.SwitchActuatorResource;
+import resource.hvac.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

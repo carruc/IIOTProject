@@ -24,6 +24,11 @@ public class AlarmActuatorResource extends GenericResource<AlarmValueDescriptor>
         alarmValueDescriptor = new AlarmValueDescriptor();
     }
 
+    @Override
+    public AlarmValueDescriptor loadUpdatedValue() {
+        return null;
+    }
+
     public Boolean getValue() {
         return alarmValueDescriptor.getValue();
     }

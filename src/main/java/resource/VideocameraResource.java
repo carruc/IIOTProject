@@ -32,6 +32,11 @@ public class VideocameraResource extends GenericResource<VideocameraDescriptor> 
         init();
     }
 
+    @Override
+    public VideocameraDescriptor loadUpdatedValue() {
+        return null;
+    }
+
     private void init() {
         videoCameraData = new VideocameraDescriptor();
         timer = new Timer();

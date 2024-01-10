@@ -39,6 +39,11 @@ public class HealthcareSensorResource extends GenericResource<HealthcareDataDesc
         init();
     }
 
+    @Override
+    public HealthcareDataDescriptor loadUpdatedValue() {
+        return null;
+    }
+
     private void init() {
         healthcareData = new HealthcareDataDescriptor(new BPMDescriptor(), new OxygenDescriptor(), new BodyTemperatureDescriptor());
         timer = new Timer();

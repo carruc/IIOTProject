@@ -1,9 +1,10 @@
 package resource.hvac;
 
-import org.server.GenericResource;
-import org.server.ResourceDataListener;
-import org.server.model.HvacMode;
-import org.server.model.ThermostatConfigurationDescriptor;
+
+
+import model.descriptors.ThermostatConfigurationDescriptor;
+import resource.GenericResource;
+import resource.ResourceDataListener;
 
 import java.util.UUID;
 
@@ -39,22 +40,4 @@ public class ThermostatConfigurationParameterResource extends GenericResource<Th
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        // Creazione di una configurazione iniziale
-        ThermostatConfigurationDescriptor initialConfig = new ThermostatConfigurationDescriptor(20.0, 15.0, "coap://127.0.0.1:5683/room/switch", HvacMode.HEATING);
-
-        // Creazione della risorsa con la configurazione iniziale
-        ThermostatConfigurationParameterResource configResource = new ThermostatConfigurationParameterResource(initialConfig);
-
-        // Visualizzazione dello stato iniziale
-        System.out.println("Initial Configuration: " + configResource.getThermostatConfigurationModel());
-
-        // Aggiunta di un listener per monitorare i cambiamenti
-        configResource.addDataListener(new ResourceDataListener<ThermostatConfigurationDescriptor>() {
-            @Override
-            public void onDataChanged(GenericResource<ThermostatConfigurationDescriptor> resource, ThermostatConfigurationDescriptor updatedValue) {
-                System.out.println("Configuration Updated: " + updatedValue);
-            }
-        });
-    }
 }

@@ -1,9 +1,10 @@
 package resource.hvac;
 
-import org.server.GenericResource;
-import org.server.ResourceDataListener;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import resource.GenericResource;
+import resource.ResourceDataListener;
 
 import java.util.UUID;
 

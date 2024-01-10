@@ -21,4 +21,9 @@ public class VideocameraInfoResource extends GenericResource<VideocameraInfoDesc
     public VideocameraInfoDescriptor getVideocameraInfoDescriptor() {
         return videocameraInfoDescriptor;
     }
+
+    @Override
+    public VideocameraInfoDescriptor loadUpdatedValue() {
+        return null;
+    }
 }

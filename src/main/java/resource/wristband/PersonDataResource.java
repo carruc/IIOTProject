@@ -27,4 +27,9 @@ public class PersonDataResource extends GenericResource<PersonDataDescriptor> {
     public PersonDataDescriptor getPersonDataDescriptor() {
         return personDataDescriptor;
     }
+
+    @Override
+    public PersonDataDescriptor loadUpdatedValue() {
+        return null;
+    }
 }

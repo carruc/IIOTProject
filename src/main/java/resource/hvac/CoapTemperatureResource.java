@@ -7,11 +7,11 @@ import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.server.resources.CoapExchange;
-import org.server.GenericResource;
-import org.server.ResourceDataListener;
-import org.server.utils.CoreInterfaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import resource.GenericResource;
+import resource.ResourceDataListener;
+import utils.CoreInterfaces;
 
 import java.util.HashMap;
 import java.util.Map;

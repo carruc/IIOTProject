@@ -7,12 +7,12 @@ import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.server.resources.CoapExchange;
-import org.server.GenericResource;
-import org.server.ResourceDataListener;
-import org.server.model.ThermostatConfigurationDescriptor;
-import org.server.utils.CoreInterfaces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import model.descriptors.ThermostatConfigurationDescriptor;
+import resource.GenericResource;
+import resource.ResourceDataListener;
+import utils.CoreInterfaces;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +24,6 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
     private final static Logger logger = LoggerFactory.getLogger(CoapThermostatConfigurationParameterResource.class);
 
     private static final String OBJECT_TITLE = "ThermostatConfiguration";
-
-    private static final Number VERSION = 0.1;
 
     private ThermostatConfigurationParameterResource thermostatConfigurationParameterResource;
 
