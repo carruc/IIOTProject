@@ -20,7 +20,7 @@ public class VideocameraResource extends GenericResource<VideocameraDescriptor> 
     private Random random;
 
     private static final long CAMERA_DATA_UPDATE_STARTING_DELAY = 5000;
-    private static final long CAMERA_DATA_UPDATE_PERIOD = 5000;
+    private static final long CAMERA_DATA_UPDATE_PERIOD = 30000;
 
     public VideocameraResource() {
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);

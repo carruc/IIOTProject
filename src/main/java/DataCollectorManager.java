@@ -23,8 +23,8 @@ import static process.ProcessConfiguration.QOS_2;
 public class DataCollectorManager {
     private final static Logger logger = LoggerFactory.getLogger(DataCollectorManager.class);
 
-    private static final String VIDEOCAMERA_INFO_TOPIC = "videocamera/+/info/+";
-    private static final String VIDEOCAMERA_TELEMETRY_TOPIC = "videocamera/+/telemetry/+";
+    private static final String VIDEOCAMERA_INFO_TOPIC = "videocameras/+/info/+";
+    private static final String VIDEOCAMERA_TELEMETRY_TOPIC = "videocameras/+/telemetry/+";
 
 
     private static final String BASE_WRISTBAND_TOPIC = "wristbands";
@@ -35,7 +35,6 @@ public class DataCollectorManager {
     private static final String GPS_TOPIC = "gps";
     private static final String CONTROL_TOPIC = "control";
     private static final String ALARM_TOPIC = "alarm";
-
 
     private static final Double MAX_TOLERABLE_BPM_VALUE = 100.0;
     private static final Double MAX_TOLERABLE_BODY_TEMPERATURE_VALUE = 38.0;
@@ -49,7 +48,7 @@ public class DataCollectorManager {
 
     private static final Map<String, PersonHealthcareDataDescriptor> personHealthcareDataMap = new HashMap<>();
     private static final Map<String, PersonHealthcareAndAlarmFlagDescriptor> personFlagMap = new HashMap<>();
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static void main(String[] args) {
         runMQTTSubscribers();
@@ -162,8 +161,8 @@ public class DataCollectorManager {
 
                         if(receivedGPSLocation.isPresent()) {
                             GPSLocationDescriptor gpsLocationDescriptor = receivedGPSLocation.get();
-                            System.out.println(PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
-                                    NURSING_HOUSE_LOCATION.getGPSLocation()));
+                            //System.out.println(PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
+                            // NURSING_HOUSE_LOCATION.getGPSLocation()));
                             String personWristbandId = topic.replace("wristbands/", "").replace("/telemetry/gps", "");
                             if(personFlagMap.get(personWristbandId).getAlarmFlag() == false && PointXYZUtils.distanceXY(gpsLocationDescriptor.getGPSLocation(),
                                     NURSING_HOUSE_LOCATION.getGPSLocation()) >= MAX_TOLERABLE_WRISTBAND_DISTANCE_METER){
@@ -187,7 +186,7 @@ public class DataCollectorManager {
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     try{
                         byte[] payload = message.getPayload();
-                        System.out.println("Topic: " + topic + " Payload: " + new String(payload));
+                        logger.info("Message received at topic: {} Payload:{}", topic, new String(payload));
                     }catch(Exception e){
                         e.printStackTrace();
                     }
@@ -198,7 +197,7 @@ public class DataCollectorManager {
                 public void messageArrived(String topic, MqttMessage message) throws Exception {
                     try{
                         byte[] payload = message.getPayload();
-                        System.out.println("Topic: " + topic + " Payload: " + new String(payload));
+                        logger.info("Message received at topic: {} Payload:{}", topic, new String(payload));
                     }catch(Exception e){
                         e.printStackTrace();
                     }

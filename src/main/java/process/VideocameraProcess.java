@@ -29,7 +29,7 @@ public class VideocameraProcess {
 
             mqttClient.connect(options);
 
-            logger.info("MQTT client Connected ! Client id: {}", cameraId);
+            logger.info("Videocamera connected to the MQTT Broker. CameraId: {}", cameraId);
 
             VideoCameraSmartObject videoCameraSmartObject = new VideoCameraSmartObject();
 

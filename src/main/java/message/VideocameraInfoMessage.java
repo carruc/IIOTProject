@@ -2,7 +2,7 @@ package message;
 
 import model.descriptors.VideocameraInfoDescriptor;
 
-public class VideocameraInfoMessage extends GenericMessage{
+public class VideocameraInfoMessage extends GenericMessage {
     private int roomNumber;
     private String cameraId;
 
@@ -37,9 +37,6 @@ public class VideocameraInfoMessage extends GenericMessage{
 
     @Override
     public String toString() {
-        return "VideocameraInfoMessage{" +
-                "roomNumber=" + roomNumber +
-                ", cameraId='" + cameraId + '\'' +
-                '}';
+        return "VideocameraInfoMessage{" + "roomNumber=" + roomNumber + ", cameraId='" + cameraId + '\'' + '}';
     }
 }

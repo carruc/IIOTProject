@@ -83,16 +83,19 @@ public class VideoCameraSmartObject implements GenericSmartObject {
                     /**data topic**/
 
                     if (cameraResource.getType().equals(VideocameraResource.RESOURCE_TYPE)) {
-                        try {
-                            VideocameraResource videoCameraResource = (VideocameraResource) cameraResource;
+                        VideocameraResource videoCameraResource = (VideocameraResource) cameraResource;
 
-                            String cameraDataTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, cameraId, TELEMETRY_TOPIC, resourceEntry.getKey());
-                            publishJsonFormattedMessage(cameraDataTopic,
-                                    new VideocameraDataMessage(videoCameraResource.getVideoCameraData()),
-                                    false, QOS_0);
-                        } catch (Exception e) {
-                            logger.error("ERROR");
-                        }
+                        videoCameraResource.addDataListener((resource, updatedValue) -> {
+                            try {
+
+                                String cameraDataTopic = String.format("%s/%s/%s/%s", BASIC_TOPIC, cameraId, TELEMETRY_TOPIC, resourceEntry.getKey());
+                                publishJsonFormattedMessage(cameraDataTopic,
+                                        new VideocameraDataMessage(videoCameraResource.getVideoCameraData()),
+                                        false, QOS_0);
+                            } catch (Exception e) {
+                                logger.error("ERROR");
+                            }
+                        });
                     }
 
                     /**info topic**/
