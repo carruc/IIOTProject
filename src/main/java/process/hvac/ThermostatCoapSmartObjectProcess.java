@@ -22,7 +22,7 @@ import java.util.UUID;
 public class ThermostatCoapSmartObjectProcess extends CoapServer {
 
     private final static Logger logger = LoggerFactory.getLogger(ThermostatCoapSmartObjectProcess.class);
-    private static final String COAP_ENDPOINT = "coap://127.0.0.1:5684/switch";
+    private static final String HVAC_ENDPOINT = "coap://127.0.0.1:5683/switch";
 
     public ThermostatCoapSmartObjectProcess(int port) {
         super(port);
@@ -31,23 +31,17 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
 
         //INIT Emulated Physical Sensors and Actuators
         TemperatureSensorResource temperatureSensorResource = new TemperatureSensorResource();
-        SwitchActuatorResource switchActuatorResource = new SwitchActuatorResource();
         ThermostatConfigurationParameterResource configurationRawParameter = new ThermostatConfigurationParameterResource(new ThermostatConfigurationDescriptor());
 
         CoapTemperatureResource temperatureResource = new CoapTemperatureResource(deviceId,
                 "temperature",
                 temperatureSensorResource);
 
-        CoapSwitchActuatorResource switchResource = new CoapSwitchActuatorResource(deviceId,
-                "switch",
-                switchActuatorResource);
-
         CoapThermostatConfigurationParameterResource configurationResource = new CoapThermostatConfigurationParameterResource(deviceId,
                 "configuration",
                 configurationRawParameter);
 
         this.add(temperatureResource);
-        this.add(switchResource);
         this.add(configurationResource);
 
         /**Verifica sulla temperatura**/
@@ -57,7 +51,7 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
 
                 logger.info("[THERMOSTAT-BEHAVIOUR] -> Updated Temperature Value: {}", updatedValue);
 
-                if (switchActuatorResource.getActive() && isHvacCommunicationRequired(configurationRawParameter.loadUpdatedValue(), updatedValue)) {
+                if (isHvacCommunicationRequired(configurationRawParameter.loadUpdatedValue(), updatedValue)) {
                     logger.info("[THERMOSTAT-BEHAVIOUR] -> Sending PUT Request to HVAC Unit: {}", configurationRawParameter.loadUpdatedValue().getHvacUnitResourceUri());
 
                     ThermostatConfigurationDescriptor currentConfiguration = configurationRawParameter.loadUpdatedValue();
@@ -101,7 +95,7 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
     }
 
     private static void sendSwitchActuatorPutRequest() {
-        CoapClient coapClient = new CoapClient(COAP_ENDPOINT);
+        CoapClient coapClient = new CoapClient(HVAC_ENDPOINT);
 
         Request request = new Request(CoAP.Code.PUT);
 
@@ -113,11 +107,10 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
 
         logger.info("Request Pretty Print: \n{}", Utils.prettyPrint(request));
 
-        //Synchronously send the POST request (blocking call)
-        CoapResponse coapResp = null;
 
-        try {
 
+        try {;
+            CoapResponse coapResp;
             coapResp = coapClient.advanced(request);
 
             //Pretty print for the received response

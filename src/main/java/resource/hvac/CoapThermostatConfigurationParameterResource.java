@@ -12,9 +12,8 @@ import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import model.descriptors.ThermostatConfigurationDescriptor;
-import resource.GenericResource;
-import resource.ResourceDataListener;
 import utils.CoreInterfaces;
+import utils.HvacMode;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,7 +117,6 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
     public void handlePUT(CoapExchange exchange) {
         try {
             if (exchange.getRequestPayload() != null) {
-
                 String jsonPayload = new String(exchange.getRequestPayload());
                 JsonObject jsonObject = gson.fromJson(jsonPayload, JsonObject.class);
 
@@ -145,7 +143,19 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
             double maxTemperature = jsonObject.get("max_temperature").getAsDouble();
             configurationModelValue.setMaxTemperature(maxTemperature);
         }
+
+        /**if (jsonObject.has("hvac_res_uri")) {
+            String hvacUnitResourceUri = jsonObject.get("hvac_res_uri").getAsString();
+            configurationModelValue.setHvacUnitResourceUri(hvacUnitResourceUri);
+        }
+
+        if (jsonObject.has("operational_mode")) {
+            String operationalModeStr = jsonObject.get("operational_mode").getAsString();
+            HvacMode operationalMode = HvacMode.valueOf(operationalModeStr);
+            configurationModelValue.setOperationalMode(operationalMode);
+        }**/
     }
+
 
 }
 

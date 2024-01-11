@@ -7,7 +7,9 @@ public class ThermostatConfigurationDescriptor {
 
     private double maxTemperature = 16.0;
     private double minTemperature = 10.0;
-    private String hvacUnitResourceUri = "coap://127.0.0.1:5683/room147/switch";
+
+    //esempio
+    private String hvacUnitResourceUri = "coap://127.0.0.1:5683/switch";
     private HvacMode operationalMode;
 
     public ThermostatConfigurationDescriptor() {

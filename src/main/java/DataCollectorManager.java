@@ -6,6 +6,7 @@ import model.descriptors.wristband.*;
 import model.point.PointXYZ;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
+import org.eclipse.californium.core.Utils;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
@@ -50,41 +51,55 @@ public class DataCollectorManager {
     private static final Map<String, PersonHealthcareAndAlarmFlagDescriptor> personFlagMap = new HashMap<>();
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    private static final String THERMOSTAT_ENDPOINT = "coap://127.0.0.1:5684/configuration";
+
     public static void main(String[] args) {
         runMQTTSubscribers();
     }
 
     private static void performGetRequest(String uri) throws ConnectorException, IOException {
-        CoapClient coapClient = new CoapClient(uri);
+        CoapClient coapClient = new CoapClient(THERMOSTAT_ENDPOINT);
 
-        CoapResponse response = coapClient.get();
-        if (response.isSuccess()) {
-            System.out.println("GET Request Successful");
-            System.out.println("Response Code: " + response.getCode());
-            System.out.println("Payload: " + response.getResponseText());
-        } else {
-            System.out.println("GET Request Failed");
-            System.out.println("Response Code: " + response.getCode());
+        try {
+            CoapResponse coapResp;
+            coapResp = coapClient.get();
+
+            //Pretty print for the received response
+            logger.info("Response Pretty Print: \n{}", Utils.prettyPrint(coapResp));
+
+            //The "CoapResponse" message contains the response.
+            String text = coapResp.getResponseText();
+            logger.info("Payload: {}", text);
+            logger.info("Message ID: " + coapResp.advanced().getMID());
+            logger.info("Token: " + coapResp.advanced().getTokenString());
+
+        } catch (ConnectorException | IOException e) {
+            e.printStackTrace();
         }
 
         coapClient.shutdown();
     }
 
     private static void performPutRequest(String uri, JsonObject jsonPayload) throws ConnectorException, IOException {
-        CoapClient coapClient = new CoapClient(uri);
+        CoapClient coapClient = new CoapClient(THERMOSTAT_ENDPOINT);
 
-        CoapResponse response = coapClient.put(jsonPayload.toString(),  MediaTypeRegistry.APPLICATION_JSON);
+        JsonObject payload = new JsonObject();
+        payload.addProperty("min_temperature", 15.0);
+        payload.addProperty("max_temperature", 25.0);
+        payload.addProperty("hvac_res_uri","coap://127.0.0.1:5683/switch");
+        payload.addProperty("operational_mode","AUTO");
+
+        CoapResponse response = coapClient.put(payload.toString(), MediaTypeRegistry.APPLICATION_JSON);
 
         if (response.isSuccess()) {
-            System.out.println("PUT Request Successful");
-            System.out.println("Response Code: " + response.getCode());
+            System.out.println("PUT request successful");
         } else {
-            System.out.println("PUT Request Failed");
-            System.out.println("Response Code: " + response.getCode());
+            System.err.println("PUT request failed: " + response.getCode());
         }
 
         coapClient.shutdown();
     }
+
 
     public static void runMQTTSubscribers(){
         try {

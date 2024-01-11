@@ -18,15 +18,13 @@ public class HvacCoapSmartObjectProcess extends CoapServer {
 
         String deviceId = String.format("dipi:iot:%s", UUID.randomUUID().toString());
 
-        CoapResource RoomRootResource = new CoapResource("room147");
+        SwitchActuatorResource switchActuatorResource = new SwitchActuatorResource();
+        CoapSwitchActuatorResource switchResource = new CoapSwitchActuatorResource(deviceId,
+                "switch",
+                switchActuatorResource);
 
-        SwitchActuatorResource RoomSwitchActuatorResource = new SwitchActuatorResource();
+        this.add(switchResource);
 
-        CoapSwitchActuatorResource SwitchResource = new CoapSwitchActuatorResource(deviceId, "switch", RoomSwitchActuatorResource);
-
-        RoomRootResource.add(SwitchResource);
-
-        this.add(RoomRootResource);
     }
 
     public static void main(String[] args) {
