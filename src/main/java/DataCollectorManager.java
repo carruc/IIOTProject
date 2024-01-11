@@ -80,7 +80,7 @@ public class DataCollectorManager {
         coapClient.shutdown();
     }
 
-    private static void performPutRequest(String uri, JsonObject jsonPayload) throws ConnectorException, IOException {
+    private static void performPutRequest() throws ConnectorException, IOException {
         CoapClient coapClient = new CoapClient(THERMOSTAT_ENDPOINT);
 
         JsonObject payload = new JsonObject();
@@ -92,9 +92,13 @@ public class DataCollectorManager {
         CoapResponse response = coapClient.put(payload.toString(), MediaTypeRegistry.APPLICATION_JSON);
 
         if (response.isSuccess()) {
-            System.out.println("PUT request successful");
+            logger.info("Response Pretty Print: \n{}", Utils.prettyPrint(response));
+            String text = response.getResponseText();
+            logger.info("Payload: {}", text);
+            logger.info("Message ID: " + response.advanced().getMID());
+            logger.info("Token: " + response.advanced().getTokenString());
         } else {
-            System.err.println("PUT request failed: " + response.getCode());
+            logger.error("PUT request failed: {}", response.getCode());
         }
 
         coapClient.shutdown();

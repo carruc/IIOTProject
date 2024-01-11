@@ -1,6 +1,7 @@
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
 import com.google.gson.JsonObject;
+import org.eclipse.californium.core.Utils;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.elements.exception.ConnectorException;
 import org.slf4j.Logger;
@@ -22,15 +23,17 @@ public class CoapThermostatConfigurationClient {
         JsonObject payload = new JsonObject();
         payload.addProperty("min_temperature", 15.0);
         payload.addProperty("max_temperature", 25.0);
-        payload.addProperty("hvac_res_uri","coap://127.0.0.1:5683/switch");
-        payload.addProperty("operational_mode","AUTO");
 
         CoapResponse response = coapClient.put(payload.toString(), MediaTypeRegistry.APPLICATION_JSON);
 
         if (response.isSuccess()) {
-            System.out.println("PUT request successful");
+            logger.info("Response Pretty Print: \n{}", Utils.prettyPrint(response));
+            String text = response.getResponseText();
+            logger.info("Payload: {}", text);
+            logger.info("Message ID: " + response.advanced().getMID());
+            logger.info("Token: " + response.advanced().getTokenString());
         } else {
-            System.err.println("PUT request failed: " + response.getCode());
+            logger.error("PUT request failed: {}", response.getCode());
         }
 
         coapClient.shutdown();

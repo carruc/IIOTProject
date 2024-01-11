@@ -30,8 +30,6 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
 
     private ThermostatConfigurationDescriptor configurationModelValue;
 
-    private Gson gson;
-
     private ObjectMapper objectMapper;
 
     private String deviceId;
@@ -116,6 +114,8 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
     @Override
     public void handlePUT(CoapExchange exchange) {
         try {
+            Gson gson = new Gson();
+
             if (exchange.getRequestPayload() != null) {
                 String jsonPayload = new String(exchange.getRequestPayload());
                 JsonObject jsonObject = gson.fromJson(jsonPayload, JsonObject.class);
@@ -144,16 +144,6 @@ public class CoapThermostatConfigurationParameterResource extends CoapResource {
             configurationModelValue.setMaxTemperature(maxTemperature);
         }
 
-        /**if (jsonObject.has("hvac_res_uri")) {
-            String hvacUnitResourceUri = jsonObject.get("hvac_res_uri").getAsString();
-            configurationModelValue.setHvacUnitResourceUri(hvacUnitResourceUri);
-        }
-
-        if (jsonObject.has("operational_mode")) {
-            String operationalModeStr = jsonObject.get("operational_mode").getAsString();
-            HvacMode operationalMode = HvacMode.valueOf(operationalModeStr);
-            configurationModelValue.setOperationalMode(operationalMode);
-        }**/
     }
 
 
