@@ -1,6 +1,6 @@
 package message;
 
-import model.descriptors.VideocameraInfoDescriptor;
+import model.descriptors.videocamera.VideocameraInfoDescriptor;
 
 public class VideocameraInfoMessage extends GenericMessage {
     private int roomNumber;

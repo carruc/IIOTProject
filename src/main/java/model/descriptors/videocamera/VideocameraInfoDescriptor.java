@@ -1,4 +1,4 @@
-package model.descriptors;
+package model.descriptors.videocamera;
 
 public class VideocameraInfoDescriptor {
     private int roomNumber;

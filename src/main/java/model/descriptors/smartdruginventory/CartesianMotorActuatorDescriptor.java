@@ -1,4 +1,6 @@
-package model.descriptors;
+package model.descriptors.smartdruginventory;
+
+import model.descriptors.GenericDescriptor;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
@@ -8,14 +10,15 @@ import java.awt.geom.Point2D.Double;
  * Value represents the current location on the cartesian map in meters.
  * incrementSize and precision are a measures of the motor's sensitivity;
  */
-public class CartesianMotorActuatorDescriptor extends GenericDescriptor<Point2D.Double> {
+public class CartesianMotorActuatorDescriptor extends GenericDescriptor<Double> {
 
-    private final Point2D.Double defaultPoint = new Point2D.Double();
+    public static final Point2D.Double startingPoint = new Point2D.Double(0.0, 0.0);
     private static final double MAX_X = 10.0f;
     private static final double MAX_Y = 10.0f;
     private static final double MIN_X = 0.0f;
     private static final double MIN_Y = 0.0f;
-    private double precision;
+    private final double precision;
+    private Boolean idle;
     private Point2D.Double destPoint;
     private Point2D.Double increment;
 
@@ -24,6 +27,11 @@ public class CartesianMotorActuatorDescriptor extends GenericDescriptor<Point2D.
         this.destPoint = new Point2D.Double();
         this.increment = new Point2D.Double();
         this.precision = 0.001;
+        this.idle = true;
+    }
+
+    public Point2D.Double getStartingPoint(){
+        return startingPoint;
     }
 
     public CartesianMotorActuatorDescriptor(double precision) {
@@ -43,11 +51,15 @@ public class CartesianMotorActuatorDescriptor extends GenericDescriptor<Point2D.
         }
     }*/
 
-    public Double getDestPoint() {
+    public Point2D.Double getCurrentPoint(){
+        return this.getValue();
+    }
+
+    public Point2D.Double getDestPoint() {
         return destPoint;
     }
 
-    public Double getIncrement() {
+    public Point2D.Double getIncrement() {
         return increment;
     }
 
@@ -55,13 +67,29 @@ public class CartesianMotorActuatorDescriptor extends GenericDescriptor<Point2D.
         return precision;
     }
 
+    public Boolean isIdle(){
+        return this.idle;
+    }
+
     public void to(Point2D.Double destPoint) {
         clampPoint(destPoint);
         this.destPoint = destPoint;
         this.increment = new Point2D.Double((destPoint.getX() - getValue().getX()) * precision, (destPoint.getY() - getValue().getY()) * precision);
+
+        this.idle = false;
+
+        //To implement with Thread
+        while(destPoint.distance(getValue()) > precision) {
+            this.step();
+        }
+
+        this.setValue(destPoint);
+        this.increment = new Point2D.Double();
+
+        this.idle = true;
     }
 
-    private void move() {
+    private void step(){
         Point2D.Double point = getValue();
         point.setLocation(point.getX() + increment.getX(), point.getY() + increment.getY());
         this.setValue(point);

@@ -2,9 +2,8 @@ package resource.hvac;
 
 
 
-import model.descriptors.ThermostatConfigurationDescriptor;
+import model.descriptors.thermostat.ThermostatConfigurationDescriptor;
 import resource.GenericResource;
-import resource.ResourceDataListener;
 
 import java.util.UUID;
 
@@ -34,10 +33,8 @@ public class ThermostatConfigurationParameterResource extends GenericResource<Th
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("ThermostatRawConfigurationParameter{");
-        sb.append("thermostatConfigurationModel=").append(thermostatConfigurationDescriptor);
-        sb.append('}');
-        return sb.toString();
+        String sb = "ThermostatRawConfigurationParameter{" + "thermostatConfigurationModel=" + thermostatConfigurationDescriptor + '}';
+        return sb;
     }
 
 }

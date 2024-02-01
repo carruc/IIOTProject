@@ -1,6 +1,6 @@
 package process.hvac;
 
-import model.descriptors.ThermostatConfigurationDescriptor;
+import model.descriptors.thermostat.ThermostatConfigurationDescriptor;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.CoapServer;
@@ -27,7 +27,7 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
     public ThermostatCoapSmartObjectProcess(int port) {
         super(port);
 
-        String deviceId = String.format("dipi:iot:%s", UUID.randomUUID().toString());
+        String deviceId = String.format("dipi:iot:%s", UUID.randomUUID());
 
         //INIT Emulated Physical Sensors and Actuators
         TemperatureSensorResource temperatureSensorResource = new TemperatureSensorResource();
@@ -109,7 +109,7 @@ public class ThermostatCoapSmartObjectProcess extends CoapServer {
 
 
 
-        try {;
+        try {
             CoapResponse coapResp;
             coapResp = coapClient.advanced(request);
 

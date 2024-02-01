@@ -7,13 +7,12 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import model.descriptors.VideocameraDescriptor;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import resource.GenericResource;
-import resource.VideocameraInfoResource;
-import resource.VideocameraResource;
+import resource.videocamera.VideocameraInfoResource;
+import resource.videocamera.VideocameraResource;
 
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class VideoCameraSmartObject implements GenericSmartObject {
 
     private Map<String, GenericResource<?>> resourceMap;
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
     public VideoCameraSmartObject() {
         this.mapper = new ObjectMapper();

@@ -23,7 +23,7 @@ public class CoapTemperatureResource extends CoapResource {
 
     private static final String OBJECT_TITLE = "TemperatureSensor";
     private static final Number SENSOR_VERSION = 0.1;
-    private String UNIT = "Cel";
+    private final String UNIT = "Cel";
 
     private TemperatureSensorResource temperatureSensorResource;
     private ObjectMapper objectMapper;

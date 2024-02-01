@@ -1,4 +1,4 @@
-package model.descriptors;
+package model.descriptors.thermostat;
 
 
 import utils.HvacMode;
@@ -56,12 +56,7 @@ public class ThermostatConfigurationDescriptor {
 
     @Override
     public String toString() {
-        final StringBuffer sb = new StringBuffer("ThermostatConfigurationDescriptor{");
-        sb.append("maxTemperature=").append(maxTemperature);
-        sb.append(", minTemperature=").append(minTemperature);
-        sb.append(", hvacUnitResourceUri='").append(hvacUnitResourceUri).append('\'');
-        sb.append(", operationalMode=").append(operationalMode);
-        sb.append('}');
-        return sb.toString();
+        String sb = "ThermostatConfigurationDescriptor{" + "maxTemperature=" + maxTemperature + ", minTemperature=" + minTemperature + ", hvacUnitResourceUri='" + hvacUnitResourceUri + '\'' + ", operationalMode=" + operationalMode + '}';
+        return sb;
     }
 }

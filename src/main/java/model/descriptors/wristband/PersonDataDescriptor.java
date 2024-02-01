@@ -8,10 +8,6 @@ public class PersonDataDescriptor {
     private int roomNumber;
     private String wristbandId;
 
-    public PersonDataDescriptor() {
-
-    }
-
     public PersonDataDescriptor(String CF, String name, String lastname, int age, int roomNumber, String wristbandId) {
         this.CF = CF;
         this.name = name;

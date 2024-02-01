@@ -41,7 +41,7 @@ public enum CoreInterfaces {
     CORE_RP("core.rp"),
     CORE_A("core.a");
 
-    private String value;
+    private final String value;
 
     CoreInterfaces(String value) {
         this.value = value;

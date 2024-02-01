@@ -1,7 +1,7 @@
 package message;
 
 public abstract class GenericMessage {
-    private long timestamp;
+    private final long timestamp;
 
     public GenericMessage(){
         timestamp = System.currentTimeMillis();

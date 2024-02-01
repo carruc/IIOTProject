@@ -4,16 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
 import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import model.descriptors.ThermostatConfigurationDescriptor;
+import model.descriptors.thermostat.ThermostatConfigurationDescriptor;
 import utils.CoreInterfaces;
-import utils.HvacMode;
 
 import java.util.HashMap;
 import java.util.Map;

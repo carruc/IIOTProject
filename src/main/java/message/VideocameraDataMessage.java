@@ -1,6 +1,6 @@
 package message;
 
-import model.descriptors.VideocameraDescriptor;
+import model.descriptors.videocamera.VideocameraDescriptor;
 
 public class VideocameraDataMessage extends GenericMessage {
     private int numberOfPeople;

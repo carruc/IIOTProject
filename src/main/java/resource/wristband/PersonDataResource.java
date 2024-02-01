@@ -12,7 +12,7 @@ public class PersonDataResource extends GenericResource<PersonDataDescriptor> {
 
     public static final String RESOURCE_TYPE = "iot:parameter:person";
 
-    private PersonDataDescriptor personDataDescriptor;
+    private final PersonDataDescriptor personDataDescriptor;
 
     public PersonDataResource(PersonDataDescriptor personDataDescriptor){
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);

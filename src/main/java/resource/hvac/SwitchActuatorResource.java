@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public class SwitchActuatorResource extends GenericResource<Boolean> {
 
-    private static Logger logger = LoggerFactory.getLogger(SwitchActuatorResource.class);
+    private static final Logger logger = LoggerFactory.getLogger(SwitchActuatorResource.class);
 
     private static final String LOG_DISPLAY_NAME = "SwitchActuator";
 

@@ -5,9 +5,9 @@ package model.descriptors.wristband;
 
 public class HealthcareDataDescriptor {
 
-    private BPMDescriptor BPMDescriptor;
-    private OxygenDescriptor oxygenDescriptor;
-    private BodyTemperatureDescriptor bodyTemperatureDescriptor;
+    private final BPMDescriptor BPMDescriptor;
+    private final OxygenDescriptor oxygenDescriptor;
+    private final BodyTemperatureDescriptor bodyTemperatureDescriptor;
 
     public HealthcareDataDescriptor(){
         this.BPMDescriptor = new BPMDescriptor();

@@ -41,7 +41,6 @@ public class WristbandProcess {
 
             logger.info("Wristband connected to the MQTT Broker. WristbandId: {}",wristbandId);
 
-
             WristbandSmartObject wristbandSmartObject = new WristbandSmartObject();
 
             PersonDataDescriptor personDataDescriptor = new PersonDataDescriptor("FPPCVL", "Filippo", "Cavalieri", 21

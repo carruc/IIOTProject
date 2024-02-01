@@ -1,13 +1,13 @@
 package process;
 
 import device.VideoCameraSmartObject;
-import model.descriptors.VideocameraInfoDescriptor;
+import model.descriptors.videocamera.VideocameraInfoDescriptor;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import resource.VideocameraInfoResource;
-import resource.VideocameraResource;
+import resource.videocamera.VideocameraInfoResource;
+import resource.videocamera.VideocameraResource;
 
 import java.util.HashMap;
 

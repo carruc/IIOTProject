@@ -1,9 +1,10 @@
-package resource;
+package resource.videocamera;
 
-import model.descriptors.VideocameraDescriptor;
-import model.descriptors.wristband.HealthcareDataDescriptor;
+import model.descriptors.videocamera.VideocameraDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import resource.GenericResource;
+import resource.ResourceDataListener;
 
 import java.util.Random;
 import java.util.Timer;

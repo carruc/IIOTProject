@@ -12,7 +12,7 @@ public class AlarmActuatorResource extends GenericResource<AlarmValueDescriptor>
 
     public static final String RESOURCE_TYPE = "iot:actuator:alarm";
 
-    private AlarmValueDescriptor alarmValueDescriptor;
+    private final AlarmValueDescriptor alarmValueDescriptor;
 
     public AlarmActuatorResource(){
         super(UUID.randomUUID().toString(), RESOURCE_TYPE);

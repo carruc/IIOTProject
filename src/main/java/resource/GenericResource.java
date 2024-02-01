@@ -33,7 +33,7 @@ public abstract class GenericResource<T> {
     }
 
     public void removeDataListener(ResourceDataListener<T> resourceDataListener) {
-        if (this.resourceDataListeners != null && this.resourceDataListeners.contains(resourceDataListener))
+        if (this.resourceDataListeners != null)
             this.resourceDataListeners.remove(resourceDataListener);
     }
 

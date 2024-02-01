@@ -16,7 +16,7 @@ public class HvacCoapSmartObjectProcess extends CoapServer {
     public HvacCoapSmartObjectProcess() {
         super();
 
-        String deviceId = String.format("dipi:iot:%s", UUID.randomUUID().toString());
+        String deviceId = String.format("dipi:iot:%s", UUID.randomUUID());
 
         SwitchActuatorResource switchActuatorResource = new SwitchActuatorResource();
         CoapSwitchActuatorResource switchResource = new CoapSwitchActuatorResource(deviceId,
