@@ -48,6 +48,7 @@ public class SmartWatchDrugRequestResource extends GenericResource<SmartWatchDru
                 @Override
                 public void run() {
                     smartWatchDrugRequestDescriptor.setDrugID(drugList.get(random.nextInt(drugList.size())).getId());
+
                     notifyUpdate(smartWatchDrugRequestDescriptor);
                 }
             }, SMARTWATCH_MESSAGE_UPDATE_STARTING_DELAY, SMARTWATCH_MESSAGE_UPDATE_PERIOD);

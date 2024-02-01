@@ -183,7 +183,15 @@ public class DataCollectorManager {
                             if (!personFlagMap.get(personWristbandId).getHealthcareFlag() && (healthcareDataDescriptor.getBPM() < MIN_TOLERABLE_BPM_VALUE || healthcareDataDescriptor.getBPM() > MAX_TOLERABLE_BPM_VALUE || healthcareDataDescriptor.getOxygen() < MIN_TOLERABLE_OXYGEN_VALUE || healthcareDataDescriptor.getBodyTemperature() < MIN_TOLERABLE_BODY_TEMPERATURE_VALUE || healthcareDataDescriptor.getBodyTemperature() > MAX_TOLERABLE_BODY_TEMPERATURE_VALUE)) {
                                 publishJsonFormattedMessage(mqttClient, IRREGULAR_HEALTHCARE_DATA_TOPIC, new IrregularHealthcareDataMessage(personHealthcareDataMap.get(personWristbandId).getPerson(), healthcareDataDescriptor), false, QOS_2);
                                 personFlagMap.get(personWristbandId).setHealthcareFlag(true);
-                                System.out.println("EMERGENCY");
+
+                                try {
+
+                                    mqttClient.publish(BASE_SMARTWATCH_TOPIC + "/+/info/" + DISPLAY_TOPIC,
+                                            new MqttMessage(new String("Utente: " + personWristbandId + "in " +
+                                                    "difficolta' per motivi di salute.").getBytes()));
+                                } catch (MqttException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         } else {
                             throw new Exception();
@@ -200,6 +208,15 @@ public class DataCollectorManager {
                                 String alarmTopic = String.format("%s/%s/%s/%s", BASE_WRISTBAND_TOPIC, personWristbandId, CONTROL_TOPIC, ALARM_TOPIC);
                                 publishJsonFormattedMessage(mqttClient, alarmTopic, new ControlAlarmMessage(true), false, QOS_2);
                                 personFlagMap.get(personWristbandId).setAlarmFlag(true);
+
+                                try {
+
+                                    mqttClient.publish(BASE_SMARTWATCH_TOPIC + "/+/info/" + DISPLAY_TOPIC,
+                                            new MqttMessage(new String("Utente: " + personWristbandId + "e' fuori " +
+                                                    "dalla zona predefinita.").getBytes()));
+                                } catch (MqttException e) {
+                                    throw new RuntimeException(e);
+                                }
                             }
                         } else {
                             throw new Exception();
@@ -239,12 +256,10 @@ public class DataCollectorManager {
 
                                 if (!drugWatchMap.containsValue(smartWatchID)) {
                                     try {
-                                        mqttClient.publish(BASE_DRUG_INVENTORY_TOPIC + "/" + smartDrugInventoryDescriptor.getSmartDrugInventoryID() + "/control/" + INV_REQ_TOPIC,
-                                                new MqttMessage(optional.get().getDrugID().getBytes()));
+                                        mqttClient.publish(BASE_DRUG_INVENTORY_TOPIC + "/" + smartDrugInventoryDescriptor.getSmartDrugInventoryID() + "/control/" + INV_REQ_TOPIC, new MqttMessage(optional.get().getDrugID().getBytes()));
                                     } catch (MqttException e) {
                                         throw new RuntimeException(e);
                                     }
-
                                 }
                             }
                         }
@@ -273,11 +288,7 @@ public class DataCollectorManager {
                                 SmartDrugSensorDescriptor descriptor = optional.get();
 
                                 try {
-                                    mqttClient.publish("smartwatches/" + drugWatchMap.get(drugID) + "/control/" + DISPLAY_TOPIC,
-                                            new MqttMessage(
-                                                    (new String("Il medicinale (" +
-                                                            smartDrugInventoryDescriptor.getDrugMap().get(drugID).getCommercialName()
-                                                            + ")e' " + "pronto.")).getBytes()));
+                                    mqttClient.publish("smartwatches/" + drugWatchMap.get(drugID) + "/control/" + DISPLAY_TOPIC, new MqttMessage((new String("Il medicinale (" + smartDrugInventoryDescriptor.getDrugMap().get(drugID).getCommercialName() + ")e' " + "pronto.")).getBytes()));
                                 } catch (MqttException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -291,16 +302,16 @@ public class DataCollectorManager {
                 }
             });
             mqttClient.subscribe(VIDEOCAMERA_INFO_TOPIC, new IMqttMessageListener() {
-                        @Override
-                        public void messageArrived(String topic, MqttMessage message) throws Exception {
-                            try {
-                                byte[] payload = message.getPayload();
-                                logger.info("Message received at topic: {} Payload:{}", topic, new String(payload));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                @Override
+                public void messageArrived(String topic, MqttMessage message) throws Exception {
+                    try {
+                        byte[] payload = message.getPayload();
+                        logger.info("Message received at topic: {} Payload:{}", topic, new String(payload));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             mqttClient.subscribe(VIDEOCAMERA_TELEMETRY_TOPIC, new
 
                     IMqttMessageListener() {

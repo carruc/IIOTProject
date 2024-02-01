@@ -76,7 +76,7 @@ public class SmartWatchObject implements GenericSmartObject {
     private void registerToAvailableResources() {
         try {
             this.resourceMap.entrySet().forEach(resourceEntry -> {
-                System.out.println(resourceEntry);
+
                 if (resourceEntry.getKey() != null && resourceEntry.getValue() != null) {
                     GenericResource smartWatchResource = resourceEntry.getValue();
 
